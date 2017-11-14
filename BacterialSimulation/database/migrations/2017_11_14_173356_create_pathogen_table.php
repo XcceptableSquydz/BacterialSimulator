@@ -14,11 +14,10 @@ class CreatePathogenTable extends Migration
     public function up()
     {
         Schema::create('pathogen', function (Blueprint $table) {
-            $table->string('pathogenName');
+            $table->string('pathogen_name');
             $table->string('formula');
             $table->string('image');
-            $table->string('descLink');
-            $table->timestamps();
+            $table->string('desc_link');
         });
     }
 

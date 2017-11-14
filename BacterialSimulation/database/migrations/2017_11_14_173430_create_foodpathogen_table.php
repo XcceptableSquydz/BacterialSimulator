@@ -14,9 +14,8 @@ class CreateFoodpathogenTable extends Migration
     public function up()
     {
         Schema::create('foodpathogen', function (Blueprint $table) {
-            $table->string('foodName');
-            $table->string('pathogenName');
-            $table->timestamps();
+            $table->string('food_name');
+            $table->string('pathogen_name');
         });
     }
 

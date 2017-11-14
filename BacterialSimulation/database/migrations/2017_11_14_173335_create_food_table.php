@@ -14,11 +14,10 @@ class CreateFoodTable extends Migration
     public function up()
     {
         Schema::create('food', function (Blueprint $table) {
-            $table->string('foodName');
+            $table->string('food_name');
             $table->boolean('cooked');
-            $table->integer('availableWater');
-            $table->double('phLevel');
-            $table->timestamps();
+            $table->integer('available_water');
+            $table->double('ph_level');
         });
     }
 

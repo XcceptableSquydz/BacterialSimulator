@@ -14,12 +14,12 @@ class CreateSavedsimulationsTable extends Migration
     public function up()
     {
         Schema::create('savedsimulations', function (Blueprint $table) {
-            $table->timestamps('dateCreated');
-            $table->string('pathogenName');
-            $table->string('foodName');
+            $table->string('pathogen_name');
+            $table->string('food_name');
             $table->integer('temp');
-            $table->string('simulationName');
-            $table->integer('userID');
+            $table->string('simulation_name');
+            $table->integer('user_id');
+            $table->timestamps();
         });
     }
 
