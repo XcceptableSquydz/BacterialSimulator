@@ -11,20 +11,6 @@
                     <form class="form-horizontal" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
@@ -58,6 +44,25 @@
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                            <label for="user_type" class="col-md-4 control-label">What Type of User Are You?</label>
+
+                            <div class="col-md-6">
+                                <select id="user_type" class="form-control" name="user_type" value="{{ old('user_type') }}" required>
+                                    <option value="" disabled="disabled" selected="selected">Select a Category</option>
+                                    <option value="1">Educator</option>
+                                    <option value="2">Student</option>
+                                    <option value="3">General Public</option>
+                                </select>
+                                
+                                @if ($errors->has('user_type'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('user_type') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
 
