@@ -49,6 +49,16 @@
                 font-size: 84px;
             }
 
+            .info > p {
+                color: black;
+                padding: 0 25px;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: .1rem;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
             .links > a {
                 color: #636b6f;
                 padding: 0 25px;
@@ -58,7 +68,7 @@
                 text-decoration: none;
                 text-transform: uppercase;
             }
-
+            
             .m-b-md {
                 margin-bottom: 30px;
             }
@@ -79,15 +89,12 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Bacterial Simulator
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div class="info">
+                    <p>Bacterial Simulator is a web app that is mobile responsive that will visually simulate bacteria growth on food. The growth of bacteria displays how food would change based on parameters set by the end user (such as time of day, length of exposure, humidity, temperature, etc). There will be a select database of select foods, since food-borne pathogens are typically affiliated with specific foods. The database will include a selection of built-in bacteria species, but will also provide the opportunity for the user to be able to enter new ones. The user will also be able to save settings in order to recreate a previous simulation.
+                    </p>
                 </div>
             </div>
         </div>
