@@ -18,7 +18,7 @@
                     <a class="navbar-brand" href="/login">Login</a>
                     <a class="navbar-brand" href="/register">Create Account</a>
                     @else
-                    <a class="navbar-brand" href="/users/logout">Logout</a>
+                    <a class="navbar-brand" href="/logout">Logout</a>
                     @endif
                 </li>
             </ul>
