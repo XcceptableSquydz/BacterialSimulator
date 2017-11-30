@@ -25,11 +25,9 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
+                            <label for="password" class="col-md-4 control-label">Current Password</label>
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password" required>
-
                                 @if ($errors->has('password'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
@@ -46,12 +44,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <div class="form-group">
                             <label for="user_type" class="col-md-4 control-label">What Type of User Are You?</label>
-
                             <div class="col-md-6">
-                                <select id="user_type" class="form-control" name="user_type" value="{{ old('user_type') }}" required>
-                                    <option value="" disabled="disabled" selected="selected">Select a Category</option>
+                                <select class="form-control" id="user_type" name="user_type">
+                                    <option value="" disabled="disabled" selected="selected">
+                                        Select a Category
+                                    </option>
                                     <option value="1">Educator</option>
                                     <option value="2">Student</option>
                                     <option value="3">General Public</option>
