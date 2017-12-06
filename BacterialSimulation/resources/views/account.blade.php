@@ -10,13 +10,13 @@
                         <form class="form-horizontal">
                             <div class="form-group">
                                 <label for="account_type" class="col-md-6 control-label">Account Type: </label>
-                                $acctype = $request->only('user_type');
+                                <?php $acctype = $request->only('user_type'); ?>
                                 <label name="account_type" id="account_type" class="control-label">$acctype</label>
                                 
                             </div>
                             <div class="form-group">
                                 <label for="email" class="col-md-6 control-label col-centered">E-mail: </label>
-                                $email = $request->only('email');
+                                <?php $email = $request->only('email');?>
                                 <label name="email" id="email" class="control-label">$email</label>
                                 
                             </div>
