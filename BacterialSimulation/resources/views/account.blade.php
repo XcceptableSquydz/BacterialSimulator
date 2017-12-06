@@ -10,11 +10,15 @@
                         <form class="form-horizontal">
                             <div class="form-group">
                                 <label for="account_type" class="col-md-6 control-label">Account Type: </label>
-                                <label name="account_type" id="account_type" class="control-label">Type</label>
+                                $acctype = $request->only('user_type');
+                                <label name="account_type" id="account_type" class="control-label">$acctype</label>
+                                
                             </div>
                             <div class="form-group">
                                 <label for="email" class="col-md-6 control-label col-centered">E-mail: </label>
-                                <label name="email" id="email" class="control-label">E-mail</label>
+                                $email = $request->only('email');
+                                <label name="email" id="email" class="control-label">$email</label>
+                                
                             </div>
                             <div class="form-group">
                                 <label for="total" class="col-md-6 control-label col-centered">Total Simulation run: </label>
