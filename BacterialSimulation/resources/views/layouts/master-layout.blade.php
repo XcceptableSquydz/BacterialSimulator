@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/text.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/flyPanel.css') }}" rel="stylesheet">
+    <!--<link href="{{ asset('css/vt-pieces.css') }}" rel="stylesheet">-->
     @include('layouts.master-navbar')
 </head>
 <body>

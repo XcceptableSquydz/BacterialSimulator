@@ -25,4 +25,19 @@ class EditAccountController extends Controller
     {
         return view('edit_account');
     }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\User
+     */
+    protected function update(array $data)
+    {
+        return User::create([
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'user_type' => $data['user_type']
+        ]);
+    }
 }
