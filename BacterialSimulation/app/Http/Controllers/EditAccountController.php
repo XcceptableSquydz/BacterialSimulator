@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Request;
+use Auth;
+use Hash;
+use Session;
+use Illuminate\Support\Facades\Redirect;
 
 class EditAccountController extends Controller
 {
@@ -26,18 +30,25 @@ class EditAccountController extends Controller
         return view('edit_account');
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function update(array $data)
+
+    public function update(EditAccountController $request)
     {
-        return User::create([
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'user_type' => $data['user_type']
-        ]);
+        $user = Auth::user();
+        if(Hash::check(Request::input('password-confirm'),$user->password)) {
+            if (!Request::input('email') == ''){
+                $user->email = Request::input('email');
+            }
+            if (!Request::input('new-password') == ''){
+                $user->password = bcrypt(Request::input('new-password'));
+            }
+            if (!Request::input('user_type') == ''){
+                $user->user_type = Request::input('user_type');
+            }
+            $user->save();
+            return Redirect::to('/account');
+        }
+        else{
+            return Redirect::back()->withErrors(['Incorrect Password!', 'Your account has not been updated. Please double check your password.']);
+        }
     }
 }

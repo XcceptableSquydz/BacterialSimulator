@@ -1,6 +1,7 @@
 @extends('layouts.master-layout')
 @section('content')
 <div class="container">
+
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
@@ -8,38 +9,29 @@
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('edit_account') }}">
                         {{ csrf_field() }}
-
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
 
                                 @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Current Password</label>
+                            <label for="password" class="col-md-4 control-label">New Password</label>
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
+                                <input id="new-password" type="password" class="form-control" name="new-password">
+                                @if ($errors->has('new-password'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('new-password') }}</strong>
+                                </span>
                                 @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirm" required>
                             </div>
                         </div>
 
@@ -54,11 +46,22 @@
                                     <option value="2">Student</option>
                                     <option value="3">General Public</option>
                                 </select>
-                                
                                 @if ($errors->has('user_type'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('user_type') }}</strong>
-                                    </span>
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('user_type') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password-confirm" class="col-md-4 control-label">Current Password</label>
+                            <div class="col-md-6">
+                                <input id="password-confirm" type="password" class="form-control" name="password-confirm" required>
+                                @if($errors->any())
+                                <span class="help-block">
+                                    <strong>{{$errors->first()}}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
