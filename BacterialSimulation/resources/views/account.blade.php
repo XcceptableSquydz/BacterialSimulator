@@ -11,13 +11,12 @@
                             <div class="form-group">
                                 <label for="account_type" class="col-md-6 control-label">Account Type: </label>
                                 
-                                <label name="account_type" id="account_type" class="control-label">{{$post->user_type}}</label>                                
+                                <label name="account_type" id="account_type" class="control-label">{{$user->user_type}}</label>                                
                             </div>
                             <div class="form-group">
                                 <label for="email" class="col-md-6 control-label col-centered">E-mail: </label>
                                 
-                                <label name="email" id="email" class="control-label"> {{$post->email}}</label>
-                                
+                                <label name="email" id="email" class="control-label"> {{$user->email}}</label>                                
                             </div>
                             <div class="form-group">
                                 <label for="total" class="col-md-6 control-label col-centered">Total Simulation run: </label>
