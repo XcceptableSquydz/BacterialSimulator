@@ -25,4 +25,15 @@ class AccountController extends Controller
     {
         return view('account');
     }
+
+    /**
+    *Show the admin controls view
+    *
+    * @return \Illuminate\Http\Response
+    *
+    */
+    public function adminControls()
+    {
+        return view('adminControls');
+    }
 }

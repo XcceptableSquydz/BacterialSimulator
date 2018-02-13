@@ -1,4 +1,7 @@
 @extends('layouts.master-layout')
+@section('title')
+    <title>Welcome to Bacterial Simulator</title>
+@endsection
 @section('content')
 <body>
     <div class="flex-center position-ref full-height">
