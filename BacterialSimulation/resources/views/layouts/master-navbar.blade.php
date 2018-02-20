@@ -19,7 +19,11 @@
           <a class="dropdown-item" href="/register">Create Account</a>
           <a class="dropdown-item" href="/login">Login</a>
           @else
+          <?php $user = Auth::user()?>
           <a class="dropdown-item" href="/">Home</a>
+          @if ($user->user_level == 2 || $user->user_level == 1)
+          <a class="dropdown-item" href="/admin_controls">Administrator Controls</a>
+          @endif
           <a class="dropdown-item" href="/account">Account</a>
           <a class="dropdown-item" href="/edit_account">Edit Account</a>
           <a class="dropdown-item" href="/logout">Logout</a>
@@ -28,7 +32,7 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <!-- if the uesr isn't logged in show the login button, otherwise show the logout button-->
+      <!-- if the user isn't logged in show the login button, otherwise show the logout button-->
       <li>
         @if (Auth::guest())
         <a class="navbar-brand" href="/register">Create Account</a>

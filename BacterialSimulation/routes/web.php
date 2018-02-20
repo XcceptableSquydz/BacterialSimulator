@@ -29,4 +29,10 @@ Route::post('/edit_account', 'EditAccountController@update');
 //admin controls route to post pathogens to the database
 //admin controls route to post food to the database
 //admin controls route to post user levels to the database (promote and demote)
-Route::get('/admin_controls', 'AccountController@adminControls');
+Route::get('/admin_controls', 'AccountController@adminControls')->name('admin_controls');
+Route::post('/admin_controls/pathogen', 'AccountController@addPathogen');
+Route::post('/admin_controls/food', 'AccountController@addFood');
+Route::post('/admin_controls/promote', 'AccountController@promote');
+Route::post('/admin_controls/demote', 'AccountController@demote');
+Route::post('/admin_controls/delete_pathogen', 'AccountController@deletePathogen');
+Route::post('/admin_controls/delete_food', 'AccountController@deleteFood');
