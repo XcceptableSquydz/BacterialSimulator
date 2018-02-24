@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Pathogen;
+use App\Food;
+use App\User;
+use Auth;
+use Hash;
+use Session;
+use Illuminate\Support\Facades\Redirect;
 
 class AccountController extends Controller
 {
@@ -34,26 +41,30 @@ class AccountController extends Controller
     */
     public function adminControls()
     {
-        return view('admin_controls');
+        $pathogens = Pathogen::all();
+        $foods = Food::all();
+        $admins = User::all();
+        return view('admin_controls', ['pathogens' => $pathogens,
+                                        'foods' => $foods,
+                                        'admins' => $admins]);
     }
-    /*
-    Route::post('/admin_controls/pathogen', 'AccountController@addPathogen');
-Route::post('/admin_controls/food', 'AccountController@addFood');
-Route::post('/admin_controls/promote', 'AccountController@promote');
-Route::post('/admin_controls/demote', 'AccountController@demote');
-Route::post('/admin_controls/delete_pathogen', 'AccountController@deletePathogen');
-Route::post('/admin_controls/delete_food', 'AccountController@deleteFood');*/
 
-/**
+    /**
     *post method to add a pathogen
     *
     * @return \Illuminate\Http\Response
     *
     */
-public function addPathogen()
-{
-    
-}
+    public function addPathogen(Request $request)
+    {   
+        Pathogen::create([
+            'pathogen_name' => $request->input('pathogen-name'),
+            'desc_link' => $request->input('info-link'),
+            'image' => $request->input('image-link'),
+            'formula' => $request->input('formula')
+        ]);
+        return Redirect::to('/admin_controls');
+    }
 
     /**
     *post method to add a food
@@ -61,9 +72,15 @@ public function addPathogen()
     * @return \Illuminate\Http\Response
     *
     */
-    public function addFood()
+    public function addFood(Request $request)
     {
-        
+        Food::create([
+            'food_name' => $request->input('food-name'),
+            'cooked' => $request->input('cooked'),
+            'available_water' => $request->input('water-content'),
+            'ph_level' => $request->input('ph')
+        ]);
+        return Redirect::to('/admin_controls');
     }
 
     /**
@@ -72,9 +89,19 @@ public function addPathogen()
     * @return \Illuminate\Http\Response
     *
     */
-    public function promote()
+    public function promote(Request $request)
     {
-
+        $email = $request->input('email');
+        if ($email != ''){
+            $user = User::where('email', $email) -> first();
+            $user->user_level = 1;
+            $user->save();
+            return Redirect::to('/admin_controls');
+        }
+        else {
+            return Redirect::back()->withErrors(['No email address entered', 'The account has not been updated. Please double check the email address.']);
+        }
+        
     }
 
     /**
@@ -83,9 +110,18 @@ public function addPathogen()
     * @return \Illuminate\Http\Response
     *
     */
-    public function demote()
+    public function demote(Request $request)
     {
-
+        $email = $request->input('email');
+        if ($email != ''){
+            $user = User::where('email', $email) -> first();
+            $user->user_level = 0;
+            $user->save();
+            return Redirect::to('/admin_controls');
+        }
+        else {
+            return Redirect::back()->withErrors(['No email address entered', 'The account has not been updated. Please double check the email address.']);
+        }
     }
 
     /**
@@ -94,9 +130,16 @@ public function addPathogen()
     * @return \Illuminate\Http\Response
     *
     */
-    public function deleteFood()
+    public function deleteFood(Request $request)
     {
-
+        $food_name = $request->get('delete-food');
+        if ($food_name != ''){
+            Food::where('food_name', $food_name) -> delete();
+            return Redirect::to('/admin_controls');
+        }
+        else {
+            return Redirect::back()->withErrors(['Something went wrong', 'Pathogen not deleted.']);
+        }
     }
 
     /**
@@ -105,9 +148,16 @@ public function addPathogen()
     * @return \Illuminate\Http\Response
     *
     */
-    public function deletePathogen()
+    public function deletePathogen(Request $request)
     {
-
+        $pathogen_name = $request->input('delete-pathogen');
+        if ($pathogen_name != ''){
+            Pathogen::where('pathogen_name', $pathogen_name) -> delete();
+            return Redirect::to('/admin_controls');
+        }
+        else {
+            return Redirect::back()->withErrors(['Something went wrong', 'Pathogen not deleted.']);
+        }
     }
 
 }
