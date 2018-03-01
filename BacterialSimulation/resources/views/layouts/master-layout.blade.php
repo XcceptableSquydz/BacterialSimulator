@@ -20,11 +20,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <!--<link href="{{ asset('css/vt-pieces.css') }}" rel="stylesheet">-->
     @include('layouts.master-navbar')
-    @yield('script')
+    
 </head>
 <body>
     <div>
         @yield('content')
     </div>
+    <center>
+        <div class="container">
+            @yield('script')
+        </div>
+    </center>
 </body>
+
 </html>

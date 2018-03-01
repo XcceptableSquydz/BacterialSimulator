@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class AccountController extends Controller
 {
-    /**
+    /** 
      * Create a new controller instance.
      *
      * @return void
@@ -45,8 +45,8 @@ class AccountController extends Controller
         $foods = Food::all();
         $admins = User::all();
         return view('admin_controls', ['pathogens' => $pathogens,
-                                        'foods' => $foods,
-                                        'admins' => $admins]);
+            'foods' => $foods,
+            'admins' => $admins]);
     }
 
     /**
@@ -57,12 +57,18 @@ class AccountController extends Controller
     */
     public function addPathogen(Request $request)
     {   
-        Pathogen::create([
-            'pathogen_name' => $request->input('pathogen-name'),
-            'desc_link' => $request->input('info-link'),
-            'image' => $request->input('image-link'),
-            'formula' => $request->input('formula')
-        ]);
+        if(($request->input('pathogen-name') != '') && ($request->input('info-link') != '') && ($request->input('image-link') != '') && ($request->input('formula') != '')){
+            Pathogen::create([
+                'pathogen_name' => $request->input('pathogen-name'),
+                'desc_link' => $request->input('info-link'),
+                'image' => $request->input('image-link'),
+                'formula' => $request->input('formula')
+            ]);
+        }
+        else
+        {
+            return Redirect::back()->withErrors(['The entire form must be filled out', 'The pathogen was not added to the database.']);
+        }
         return Redirect::to('/admin_controls');
     }
 
@@ -74,12 +80,17 @@ class AccountController extends Controller
     */
     public function addFood(Request $request)
     {
-        Food::create([
-            'food_name' => $request->input('food-name'),
-            'cooked' => $request->input('cooked'),
-            'available_water' => $request->input('water-content'),
-            'ph_level' => $request->input('ph')
-        ]);
+        if(($request->input('food-name') != '') && ($request->input('cooked') != '') && ($request->input('water-content') != '') && ($request->input('ph') != '')){
+            Food::create([
+                'food_name' => $request->input('food-name'),
+                'cooked' => $request->input('cooked'),
+                'available_water' => $request->input('water-content'),
+                'ph_level' => $request->input('ph')
+            ]);
+        }
+        else{
+            return Redirect::back()->withErrors(['The entire form must be filled out', 'The food was not added to the database.']);
+        }
         return Redirect::to('/admin_controls');
     }
 

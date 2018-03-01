@@ -124,14 +124,14 @@
 									<div class="form-group">
 										<label for="water-content" class="col-md-4 control-label">Water Content (% of food)</label>
 										<div class="col-md-6">
-											<input id="water-content" type="text" class="form-control" name="water-content">
+											<input id="water-content" type="number" step=".01" max="100" class="form-control" name="water-content">
 										</div>
 									</div>
 									<!-- Creating the label and input for new ph level -->
 									<div class="form-group">
 										<label for="ph" class="col-md-4 control-label">PH Level</label>
 										<div class="col-md-6">
-											<input id="ph" type="text" class="form-control" name="ph">
+											<input id="ph" type="number" step=".01" max="14" class="form-control" name="ph">
 										</div>
 									</div>
 									<!-- Submit button -->
@@ -273,19 +273,19 @@
 						<div>
 							@foreach($pathogens as $pathogen)
 							<ul>
-								<li>Pathogen Name: {{ $pathogen->pathogen_name }}</li>
-								<li>Pathogen Formula: {{ $pathogen->formula }}</li>
-								<li>Pathogen Image Link: {{ $pathogen->image }}</li>
-								<li>Pathogen Description Link: {{ $pathogen->desc_link }}</li></br>
+								<li>Name: {{ $pathogen->pathogen_name }}</li>
+								<li>Formula: {{ $pathogen->formula }}</li>
+								<li>Image Link: {{ $pathogen->image }}</li>
+								<li>Description Link: {{ $pathogen->desc_link }}</li></br>
 							</ul>
 							@endforeach
 						</div>
 						<h3>View Food</h3>
 						<div>
+							@foreach($foods as $food)
 							<ul>
-								@foreach($foods as $food)
-								<li>Food Name: {{ $food->food_name }}</li>
-								<li>Food Cooked: {{ $food->cooked }}</li>
+								<li>Name: {{ $food->food_name }}</li>
+								<li>Is Cooked: @if ($food->cooked == 1) True @else False @endif</li>
 								<li>Available Water: {{ $food->available_water }}</li>
 								<li>PH Level: {{ $food->ph_level }}</li></br>
 							</ul>

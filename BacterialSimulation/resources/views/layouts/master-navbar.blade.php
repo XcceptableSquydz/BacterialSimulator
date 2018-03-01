@@ -24,6 +24,7 @@
           @if ($user->user_level == 2 || $user->user_level == 1)
           <a class="dropdown-item" href="/admin_controls">Administrator Controls</a>
           @endif
+          <a class="dropdown-item" href="/simulations">Simulations</a>
           <a class="dropdown-item" href="/account">Account</a>
           <a class="dropdown-item" href="/edit_account">Edit Account</a>
           <a class="dropdown-item" href="/logout">Logout</a>
