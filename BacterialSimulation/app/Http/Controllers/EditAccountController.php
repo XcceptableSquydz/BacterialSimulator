@@ -30,9 +30,11 @@ class EditAccountController extends Controller
         return view('edit_account');
     }
 
-
+    //update the user based on the fields that were filed out
     public function update(EditAccountController $request)
     {
+        //update the user unless the user's password was wrong.
+        //if the password is wrong return back with errors
         $user = Auth::user();
         if(Hash::check(Request::input('password-confirm'),$user->password)) {
             if (!Request::input('email') == ''){

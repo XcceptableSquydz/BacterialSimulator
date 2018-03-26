@@ -19,8 +19,10 @@ class SimulationsController extends Controller
      */
     public function index()
     {
+        //pathogen and food variables in an array from the database
     	$pathogens = Pathogen::all();
     	$foods = Food::all();
+        //returning the simulations page with pathogen and food variables
     	return view('simulations', ['pathogens' => $pathogens,
     		'foods' => $foods]);
     }

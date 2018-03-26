@@ -20,17 +20,16 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <!--<link href="{{ asset('css/vt-pieces.css') }}" rel="stylesheet">-->
     @include('layouts.master-navbar')
-    
 </head>
-<body>
-    <div>
-        @yield('content')
-    </div>
-    <center>
-        <div class="container">
-            @yield('script')
+<!-- yield content returns the html for any view that is called.
+    yield script returns the script from any page that is called-->
+    <body>
+        <div>
+            @yield('content')
         </div>
-    </center>
-</body>
+        <center>
+            @yield('script')
+        </center>
+    </body>
 
-</html>
+    </html>

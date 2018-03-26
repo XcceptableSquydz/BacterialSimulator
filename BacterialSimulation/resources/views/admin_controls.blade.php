@@ -124,14 +124,14 @@
 									<div class="form-group">
 										<label for="water-content" class="col-md-4 control-label">Water Content (% of food)</label>
 										<div class="col-md-6">
-											<input id="water-content" type="number" step=".01" max="100" class="form-control" name="water-content">
+											<input id="water-content" type="number" step=".01" min="0" max="100" class="form-control" name="water-content">
 										</div>
 									</div>
 									<!-- Creating the label and input for new ph level -->
 									<div class="form-group">
 										<label for="ph" class="col-md-4 control-label">PH Level</label>
 										<div class="col-md-6">
-											<input id="ph" type="number" step=".01" max="14" class="form-control" name="ph">
+											<input id="ph" type="number" step=".01" min="0" max="14" class="form-control" name="ph">
 										</div>
 									</div>
 									<!-- Submit button -->
@@ -267,8 +267,10 @@
 					</div>
 				</div>
 				@endif
+				<!-- this is the tab for the view database -->
 				<div id="tabs-2">
 					<div id="accordion_view">
+						<!-- this is an accordion for view pathogens from the database -->
 						<h3>View Pathogens</h3>
 						<div>
 							@foreach($pathogens as $pathogen)
@@ -280,6 +282,7 @@
 							</ul>
 							@endforeach
 						</div>
+						<!-- this is an accordion for view foods from the database -->
 						<h3>View Food</h3>
 						<div>
 							@foreach($foods as $food)
@@ -291,6 +294,7 @@
 							</ul>
 							@endforeach
 						</div>
+						<!-- this is an accordion for view administrators from the database -->
 						<h3>View Adminstrators</h3>
 						<div>
 							@foreach($admins as $admin)

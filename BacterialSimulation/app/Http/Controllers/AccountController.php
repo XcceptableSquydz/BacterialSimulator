@@ -41,6 +41,7 @@ class AccountController extends Controller
     */
     public function adminControls()
     {
+        //creating and returning variables for pathogens, foods, and admins from the database
         $pathogens = Pathogen::all();
         $foods = Food::all();
         $admins = User::all();
@@ -57,6 +58,7 @@ class AccountController extends Controller
     */
     public function addPathogen(Request $request)
     {   
+        //if none of the input fields are empty, create a new pathogen, otherwise return the page with an error
         if(($request->input('pathogen-name') != '') && ($request->input('info-link') != '') && ($request->input('image-link') != '') && ($request->input('formula') != '')){
             Pathogen::create([
                 'pathogen_name' => $request->input('pathogen-name'),
@@ -80,6 +82,7 @@ class AccountController extends Controller
     */
     public function addFood(Request $request)
     {
+        //if none of the input fields are empty, create a new food, otherwise return the page with an error
         if(($request->input('food-name') != '') && ($request->input('cooked') != '') && ($request->input('water-content') != '') && ($request->input('ph') != '')){
             Food::create([
                 'food_name' => $request->input('food-name'),
@@ -102,6 +105,7 @@ class AccountController extends Controller
     */
     public function promote(Request $request)
     {
+        //get the email from the form and set the user level to 1 (which is co-admin), then redirect back to the page
         $email = $request->input('email');
         if ($email != ''){
             $user = User::where('email', $email) -> first();
@@ -123,6 +127,7 @@ class AccountController extends Controller
     */
     public function demote(Request $request)
     {
+        //get the email from the form and set the user level to 1 (which is co-admin), then redirect back to the page
         $email = $request->input('email');
         if ($email != ''){
             $user = User::where('email', $email) -> first();
@@ -143,13 +148,14 @@ class AccountController extends Controller
     */
     public function deleteFood(Request $request)
     {
+        //get the food from the form and delete it from the database
         $food_name = $request->get('delete-food');
         if ($food_name != ''){
             Food::where('food_name', $food_name) -> delete();
             return Redirect::to('/admin_controls');
         }
         else {
-            return Redirect::back()->withErrors(['Something went wrong', 'Pathogen not deleted.']);
+            return Redirect::back()->withErrors(['Something went wrong', 'Food not deleted.']);
         }
     }
 
@@ -161,6 +167,7 @@ class AccountController extends Controller
     */
     public function deletePathogen(Request $request)
     {
+        //get the pathogen from the form and delete it from the database
         $pathogen_name = $request->input('delete-pathogen');
         if ($pathogen_name != ''){
             Pathogen::where('pathogen_name', $pathogen_name) -> delete();
