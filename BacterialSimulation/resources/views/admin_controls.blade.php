@@ -145,6 +145,138 @@
 								</form>
 							</div>
 						</div>
+
+						<h3>Edit Food</h3>
+						<div>
+							<!-- bootstrap formatting to keep the form responsive -->
+							<div class="container">
+								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/editfood') }}">
+									<!-- csrf token -->
+									{{ csrf_field() }}
+
+									
+									<div class="form-group">
+										<label class="col-md-4 control-label" for="select-food">Select Food</label>
+										<div class="col-md-6">
+											<select class="form-control" id="select-food" name="select-food">
+												<option value="" disabled="disabled" selected="selected">
+													Select a Food
+												</option>
+												@foreach($foods as $food)
+												<option value="{{ $food->food_name }}"> {{ $food->food_name }}</option>
+												@endforeach
+											</select>
+										</div>
+									</div> 
+
+									<!-- Creating the label and input for new food name -->
+									<div class="form-group">
+										<label for="new-food-name" class="col-md-4 control-label">Food Name</label>
+										<div class="col-md-6">
+											<input id="new-food-name" type="text" class="form-control" name="new-food-name">
+										</div>
+									</div>
+									<!-- Creating the label and input for new food image link -->
+									<div class="form-group">
+										<label for="new-cooked" class="col-md-4 control-label">Is Food Cooked</label>
+										<div class="col-md-6">
+											<select class="form-control" id="new-cooked" name="new-cooked">
+												<option value="" disabled="disabled" selected="selected">
+													Select a Category
+												</option>
+												<option value="1">Yes</option>
+												<option value="2">No</option>
+											</select>
+										</div>
+									</div>
+									<!-- Creating the label and input for new water content -->
+									<div class="form-group">
+										<label for="new-water-content" class="col-md-4 control-label">Water Content (% of food)</label>
+										<div class="col-md-6">
+											<input id="new-water-content" type="number" step=".01" max="100" class="form-control" name="new-water-content">
+										</div>
+									</div>
+									<!-- Creating the label and input for new ph level -->
+									<div class="form-group">
+										<label for="new-ph" class="col-md-4 control-label">PH Level</label>
+										<div class="col-md-6">
+											<input id="new-ph" type="number" step=".01" max="14" class="form-control" name="new-ph">
+										</div>
+									</div>
+									<!-- Submit button -->
+									<div class="form-group">
+										<div class="col-md-6 col-md-offset-4">
+											<button type="submit" class="btn btn-primary">
+												Edit Food
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
+						<h3>Edit Pathogen</h3>
+						<div>
+							<!-- bootstrap formatting to keep the form responsive -->
+							<div class="container">
+								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/editpathogen') }}">
+									<!-- csrf token -->
+									{{ csrf_field() }}
+
+									
+									<div class="form-group">
+										<label class="col-md-4 control-label" for="select-pathogen">Select Pathogen</label>
+										<div class="col-md-6">
+											<select class="form-control" id="select-pathogen" name="select-pathogen">
+												<option value="" disabled="disabled" selected="selected">
+													Select a pathogen
+												</option>
+												@foreach($pathogens as $pathogen)
+												<option value="{{ $pathogen->pathogen_name }}"> {{ $pathogen->pathogen_name }}</option>
+												@endforeach
+											</select>
+										</div>
+									</div> 
+
+									<div class="form-group">
+										<label for="new-pathogen-name" class="col-md-4 control-label">Pathogen Name</label>
+										<div class="col-md-6">
+											<input id="new-pathogen-name" type="text" class="form-control" name="new-pathogen-name">
+										</div>
+									</div>
+									<!-- Creating the label and input for new pathogen info link -->
+									<div class="form-group">
+										<label for="new-info-link" class="col-md-4 control-label">Link to More Information</label>
+										<div class="col-md-6">
+											<input id="new-info-link" type="url" class="form-control" name="new-info-link">
+										</div>
+									</div>
+									<!-- Creating the label and input for new pathogen image link -->
+									<div class="form-group">
+										<label for="image-link" class="col-md-4 control-label">Link to Pathogen Image</label>
+										<div class="col-md-6">
+											<input id="new-image-link" type="url" class="form-control" name="new-image-link">
+										</div>
+									</div>
+									<!-- Creating the label and input for new pathogen formula -->
+									<div class="form-group">
+										<label for="new-formula" class="col-md-4 control-label">Growth Rate Formula</label>
+										<div class="col-md-6">
+											<input id="new-formula" type="text" class="form-control" name="new-formula">
+										</div>
+									</div>
+									<!-- Submit button -->
+									<div class="form-group">
+										<div class="col-md-6 col-md-offset-4">
+											<button type="submit" class="btn btn-primary">
+												Edit Pathogen
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+
 						@if ($user->user_level == 2)
 						<h3>Promote User</h3>
 						<div>

@@ -150,6 +150,7 @@ class AccountController extends Controller
     {
         //get the food from the form and delete it from the database
         $food_name = $request->get('delete-food');
+        
         if ($food_name != ''){
             Food::where('food_name', $food_name) -> delete();
             return Redirect::to('/admin_controls');
@@ -176,6 +177,43 @@ class AccountController extends Controller
         else {
             return Redirect::back()->withErrors(['Something went wrong', 'Pathogen not deleted.']);
         }
+    }
+
+    public function editFood(Request $request)
+    {
+        //get the food from the form and delete it from the database
+        //if none of the input fields are empty, create a new food, otherwise return the page with an error
+        $food_name = $request->get('select-food');
+        if(($food_name != '') && ($request->input('new-food-name') != '') && ($request->input('new-cooked') != '') && ($request->input('new-water-content') != '') && ($request->input('new-ph') != '')){
+            Food::where('food_name', $food_name) -> update([
+                'food_name' => $request->input('new-food-name'),
+                'cooked' => $request->input('new-cooked'),
+                'available_water' => $request->input('new-water-content'),
+                'ph_level' => $request->input('new-ph')
+            ]);
+        }
+        else{
+            return Redirect::back()->withErrors(['The entire form must be filled out', 'The food was not updated in the database.']);
+        }
+        return Redirect::to('/admin_controls');
+    }
+    public function editPathogen(Request $request)
+    {
+        //get the food from the form and delete it from the database
+        //if none of the input fields are empty, create a new food, otherwise return the page with an error
+        $pathogen_name = $request->get('select-pathogen');
+        if(($pathogen_name != '') && ($request->input('new-pathogen-name') != '') && ($request->input('new-info-link') != '') && ($request->input('new-image-link') != '') && ($request->input('new-formula') != '')){
+            Pathogen::where('pathogen_name', $pathogen_name) -> update([
+                'pathogen_name' => $request->input('new-pathogen-name'),
+                'desc_link' => $request->input('new-info-link'),
+                'image' => $request->input('new-image-link'),
+                'formula' => $request->input('new-formula')
+            ]);
+        }
+        else{
+            return Redirect::back()->withErrors(['The entire form must be filled out', 'The pathogen was not updated in the database.']);
+        }
+        return Redirect::to('/admin_controls');
     }
 
 }

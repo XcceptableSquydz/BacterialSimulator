@@ -36,5 +36,7 @@ Route::post('/admin_controls/promote', 'AccountController@promote')->name('admin
 Route::post('/admin_controls/demote', 'AccountController@demote')->name('admin_controls/demote');
 Route::post('/admin_controls/delete_pathogen', 'AccountController@deletePathogen')->name('admin_controls/delete_pathogen');
 Route::post('/admin_controls/delete_food', 'AccountController@deleteFood')->name('admin_controls/delete_food');
+Route::post('/admin_controls/editfood', 'AccountController@editFood')->name('admin_controls/editfood');
+Route::post('/admin_controls/editpathogen', 'AccountController@editPathogen')->name('admin_controls/editpathogen');
 //simulations route to get to the page
 Route::get('/simulations', 'SimulationsController@index');
