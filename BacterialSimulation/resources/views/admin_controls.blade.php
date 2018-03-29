@@ -82,6 +82,13 @@
 											<input id="formula" type="text" class="form-control" name="formula">
 										</div>
 									</div>
+									<!-- Creating the label and input for new pathogen infectious dose -->
+									<div class="form-group">
+										<label for="infectious" class="col-md-4 control-label">Infectious Dose</label>
+										<div class="col-md-6">
+											<input id="infectious" type="number" class="form-control" name="infectious">
+										</div>
+									</div>
 									<!-- Submit button -->
 									<div class="form-group">
 										<div class="col-md-6 col-md-offset-4">
@@ -134,6 +141,13 @@
 											<input id="ph" type="number" step=".01" min="0" max="14" class="form-control" name="ph">
 										</div>
 									</div>
+									<!-- Creating the label and input for new pathogen image link -->
+									<div class="form-group">
+										<label for="image-link" class="col-md-4 control-label">Link to Food Image</label>
+										<div class="col-md-6">
+											<input id="image-link" type="url" class="form-control" name="image-link">
+										</div>
+									</div>
 									<!-- Submit button -->
 									<div class="form-group">
 										<div class="col-md-6 col-md-offset-4">
@@ -145,7 +159,6 @@
 								</form>
 							</div>
 						</div>
-
 						<h3>Edit Food</h3>
 						<div>
 							<!-- bootstrap formatting to keep the form responsive -->
@@ -153,7 +166,6 @@
 								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/editfood') }}">
 									<!-- csrf token -->
 									{{ csrf_field() }}
-
 									
 									<div class="form-group">
 										<label class="col-md-4 control-label" for="select-food">Select Food</label>
@@ -222,8 +234,6 @@
 								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/editpathogen') }}">
 									<!-- csrf token -->
 									{{ csrf_field() }}
-
-									
 									<div class="form-group">
 										<label class="col-md-4 control-label" for="select-pathogen">Select Pathogen</label>
 										<div class="col-md-6">
@@ -236,8 +246,7 @@
 												@endforeach
 											</select>
 										</div>
-									</div> 
-
+									</div>
 									<div class="form-group">
 										<label for="new-pathogen-name" class="col-md-4 control-label">Pathogen Name</label>
 										<div class="col-md-6">
@@ -263,6 +272,13 @@
 										<label for="new-formula" class="col-md-4 control-label">Growth Rate Formula</label>
 										<div class="col-md-6">
 											<input id="new-formula" type="text" class="form-control" name="new-formula">
+										</div>
+									</div>
+									<!-- Creating the label and input for new pathogen infectious dose -->
+									<div class="form-group">
+										<label for="infectious" class="col-md-4 control-label">Infectious Dose</label>
+										<div class="col-md-6">
+											<input id="infectious" type="number" class="form-control" name="infectious">
 										</div>
 									</div>
 									<!-- Submit button -->

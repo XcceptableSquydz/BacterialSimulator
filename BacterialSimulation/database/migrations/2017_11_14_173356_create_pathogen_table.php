@@ -18,6 +18,7 @@ class CreatePathogenTable extends Migration
             $table->string('formula');
             $table->string('image');
             $table->string('desc_link');
+            $table->integer('infectious_dose');
         });
     }
 

@@ -18,6 +18,7 @@ class CreateFoodTable extends Migration
             $table->boolean('cooked');
             $table->integer('available_water');
             $table->double('ph_level');
+            $table->string('image_link');
         });
     }
 

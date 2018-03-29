@@ -4,7 +4,7 @@ function gridData() {
 	var ypos = 1;
 	var width = 35;
 	var height = 20;
-	var click = 0;
+	var cells = 0;
 	
 	// iterate for rows	
 	for (var row = 0; row < 15; row++) {
@@ -17,7 +17,7 @@ function gridData() {
 				y: ypos,
 				width: width,
 				height: height,
-				click: click
+				cells: cells
 			})
 			// increment the x position. I.e. move it over by 50 (width variable)
 			xpos += width;
@@ -30,8 +30,8 @@ function gridData() {
 	return data;
 }
 
-var color = d3.scaleSequential(d3.interpolateLab("white", "steelblue"))
-.domain([0, 20]);
+var color = d3.scaleSequential(d3.interpolateLab("white", "green"))
+.domain([0, 10]);
 
 var gridData = gridData();	
 // I like to log the data to the console for quick debugging
@@ -57,10 +57,9 @@ var column = row.selectAll(".square")
 .attr("height", function(d) { return d.height; })
 .style("fill", "#fff")
 .style("stroke", "#222")
-.on('click', function(d) {
-	d.click ++;
+.attr("cells", "0"); /*function(d) {
+	d.cells ++;
 	if ((d.click)%4 == 0 ) { d3.select(this).style("fill", function(d) { return color(d.click); }) }
 	if ((d.click)%4 == 1 ) { d3.select(this).style("fill", function(d) { return color(d.click); }) }
 	if ((d.click)%4 == 2 ) { d3.select(this).style("fill", function(d) { return color(d.click); }) }
-	if ((d.click)%4 == 3 ) { d3.select(this).style("fill", function(d) { return color(d.click); }) }
-});
+	if ((d.click)%4 == 3 ) { d3.select(this).style("fill", function(d) { return color(d.click); }) }*/

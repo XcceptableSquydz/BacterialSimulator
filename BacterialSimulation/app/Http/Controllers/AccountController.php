@@ -59,12 +59,13 @@ class AccountController extends Controller
     public function addPathogen(Request $request)
     {   
         //if none of the input fields are empty, create a new pathogen, otherwise return the page with an error
-        if(($request->input('pathogen-name') != '') && ($request->input('info-link') != '') && ($request->input('image-link') != '') && ($request->input('formula') != '')){
+        if(($request->input('pathogen-name') != '') && ($request->input('info-link') != '') && ($request->input('image-link') != '') && ($request->input('formula') != '') && ($request->input('infectious') != '')){
             Pathogen::create([
                 'pathogen_name' => $request->input('pathogen-name'),
                 'desc_link' => $request->input('info-link'),
                 'image' => $request->input('image-link'),
-                'formula' => $request->input('formula')
+                'formula' => $request->input('formula'),
+                'infectious_dose' => $request->input('infectious')
             ]);
         }
         else
@@ -83,12 +84,13 @@ class AccountController extends Controller
     public function addFood(Request $request)
     {
         //if none of the input fields are empty, create a new food, otherwise return the page with an error
-        if(($request->input('food-name') != '') && ($request->input('cooked') != '') && ($request->input('water-content') != '') && ($request->input('ph') != '')){
+        if(($request->input('food-name') != '') && ($request->input('cooked') != '') && ($request->input('water-content') != '') && ($request->input('ph') != '') && ($request->input('image-link') != '')){
             Food::create([
                 'food_name' => $request->input('food-name'),
                 'cooked' => $request->input('cooked'),
                 'available_water' => $request->input('water-content'),
-                'ph_level' => $request->input('ph')
+                'ph_level' => $request->input('ph'),
+                'image_link' => $request->input('image-link')
             ]);
         }
         else{
