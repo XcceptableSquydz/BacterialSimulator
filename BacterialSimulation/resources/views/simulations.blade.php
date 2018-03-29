@@ -11,8 +11,10 @@
 }
 </style>
 @section('script')
-
-<svg width="960" height="500" style="border: 1pt solid black">
+<!-- creates the container that will hold all of the cells that populate.
+        the defs/pattern are here to hold the background image.
+        the path tag draws a square and fills it with the pattern. -->
+        <svg width="960" height="500" style="border: 1pt solid black">
     <!--<defs>
         <pattern id="imgpattern" width="1" height="1">
             <image width="960" height="500"
@@ -22,6 +24,7 @@
     <path fill="url(#imgpattern)" stroke-width="1"
     d="M 0,0 L 0,960 960,500 960,0  Z" />
 </svg>
+<!-- sources for the alert and hexagons/cells that will be colored -->
 <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
@@ -32,21 +35,27 @@
         var simulationClicked = 0;
         //when the run simulation button is clicked we take the input from the user and print it out
         $("#run-simulation").click(function(){
-            simulationClicked++;
+            simulationClicked++; //needed to reset/clear the function so two simulations aren't running at the same time.
+            //changing the header based on the pathogen selected.
             path_name.innerText = $("#select-pathogen :selected").val() + " on " + $("#select-food :selected").val();
+            //setting the infection dose
             var infectious_dosage = $("#select-pathogen :selected").attr("id");
+            //setting the image http path
             var img = $("#select-food :selected").attr("id");
+            //casting the time from user input to a number
             var time = Number($("#time").val());
             var cells = $("#cells").val();
             var temp = $("#temp").val();
 
+            //removing old svg elements so cells don't stay on the screen when a user wants to run the next simulation
             d3.selectAll("svg > *").remove();
-
+            //filling svg variables with defined in the svg tag at the top
             var svg = d3.select("svg"),
             width = +svg.attr("width"),
             height = +svg.attr("height"),
             style = +svg.attr("style");
 
+            //this will be used to reset the background image to the one defined by the selected food
             /*var defs = svg.append('svg:defs');
 
             defs.append("svg:pattern")
@@ -66,89 +75,119 @@
             .style("fill", "#imgpattern");*/
 
 
-            var delta = 0.01,
-            cells = Number(cells), //number of starting cells and total cells
+            var cells = Number(cells), //number of starting cells and total cells
             infectious_dosage = Number(infectious_dosage), //infectious dose
             lot = 1, //length of time
             doublingTime = 30;
             minutes = 0; // Total number of random points.
 
+            //resets the num cells and length of time tags to 0
             $("#num_cells").html("Number of Cells: " + cells);
             $("#lot").html("Length of time (minutes): " + minutes);
 
+            //giving the svg more variables
+            var svg = d3.select("svg"),
+            margin = {top: 20, right: 20, bottom: 30, left: 40},
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            //creating the starting cells
             var rx = d3.randomNormal(width / 2, 80),
             ry = d3.randomNormal(height / 2, 80),
             points = d3.range(cells).map(function() { return [rx(), ry()]; });
 
+            //setting the color gradient based on infectious dose
             var color = d3.scaleSequential(d3.interpolateLab("white", "green"))
             .domain([0, infectious_dosage/100]);
 
+            //creating the hexagons
             var hexbin = d3.hexbin()
             .radius(20)
             .extent([[0, 0], [width, height]]);
 
+            //giving the hexgon values and appending it to the svg path
             var hexagon = svg.selectAll("path")
             .data(hexbin(points))
             .enter().append("path")
             .attr("d", hexbin.hexagon(19.5))
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
             .attr("fill", function(d) { return color(d.length); });
 
+            //the recursive function to add cells until the timer runs out or the infectious dose is reached
             var makeCallback = function() {
                 // note that we're returning a new callback function each time
                 return function(elapsed) {
-                    if(lot % 6 != 0)
+                    //change based on how fast you want the minutes to calculate (higher makes for weird asynchronous problems)
+                    if(lot % 1 != 0)
                         lot++;
                     else{
                         minutes++;
                         lot = 1;
                         $("#lot").html("Length of time (minutes): " + minutes);
                     }
-                    
+                    //creating a new plot based on the amount of cells
                     points = d3.range(cells).map(function() { return [rx(), ry()]; });
                     
+                    //adding those new points to the hexagon
                     hexagon = hexagon
                     .data(hexbin(points));
 
+                    //removing old hexagons
                     hexagon.exit().remove();
 
+                    //adding new hexagon attributes
                     hexagon = hexagon.enter().append("path")
                     .attr("d", hexbin.hexagon(19.5))
                     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
                     .merge(hexagon)
                     .attr("fill", function(d) { return color(d.length); });
-                    console.log(cells);
-                    if(cells < infectious_dosage & minutes < time){
-                        if(minutes != 0 & minutes%doublingTime == 0)
-                            cells = cells * 2;
-                        else
-                            cells = cells;
+
+                    //determines whether or not the function continues running and when to double the cells
+                    if(minutes < time){
+                        if(cells < infectious_dosage){
+                            if(minutes != 0 & minutes%doublingTime == 0)
+                                cells = cells * 2;
+                            else
+                                cells = cells;
+                        }
+                        //once infectious show the sweet alert
+                        else{
+                            simulationClicked = 0;
+                            swal({
+                                title: 'Gross!',
+                                text: 'This food has been infected.',
+                                imageUrl: 'http://www.dadshopper.com/wp-content/uploads/2016/10/21.png',
+                                imageWidth: 210,
+                                imageHeight: 200,
+                                imageAlt: 'Sick emoji',
+                                animation: false
+                            })
+                            return false;
+                        }
                     }
+                    //if the time is reached before infectious don't show the sweet alert and stop the function
                     else{
                         simulationClicked = 0;
-                        swal({
-                            title: 'Gross!',
-                            text: 'This food has been infected.',
-                            imageUrl: 'http://www.dadshopper.com/wp-content/uploads/2016/10/21.png',
-                            imageWidth: 210,
-                            imageHeight: 200,
-                            imageAlt: 'Sick emoji',
-                            animation: false
-                        })
                         return false;
                     }
 
                     $("#num_cells").html("Number of Cells: " + cells);
 
+                    //if the simulation is run during another simulation retrun false on the old function
+                    //kind of a hacky way to stop the old function
                     if(simulationClicked == 2){
                         simulationClicked = 1;
                         return false;
                     }
 
-                    d3.timeout(makeCallback(), 50);
+                    //recursive call to keep the function running
+                    d3.timeout(makeCallback(), 100);
                     return true;
                 }
             };
-            var interval = d3.timeout(makeCallback(), 50);
+            //the first recursive call so the simulation actually runs
+            var interval = d3.timeout(makeCallback(), 100);
         });
 });
 </script>
