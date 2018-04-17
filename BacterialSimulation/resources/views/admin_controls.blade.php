@@ -289,9 +289,9 @@
 									</div>
 									<!-- Creating the label and input for new pathogen infectious dose -->
 									<div class="form-group">
-										<label for="infectious" class="col-md-4 control-label">Infectious Dose</label>
+										<label for="new-infectious-dose" class="col-md-4 control-label">Infectious Dose</label>
 										<div class="col-md-6">
-											<input id="infectious" type="number" class="form-control" name="infectious">
+											<input id="new-infectious-dose" type="number" class="form-control" name="new-infectious-dose">
 										</div>
 									</div>
 									<!-- Submit button -->
@@ -439,7 +439,8 @@
 								<li>Name: {{ $pathogen->pathogen_name }}</li>
 								<li>Formula: {{ $pathogen->formula }}</li>
 								<li>Image Link: {{ $pathogen->image }}</li>
-								<li>Description Link: {{ $pathogen->desc_link }}</li></br>
+								<li>Description Link: {{ $pathogen->desc_link }}</li>
+								<li>Infectious Dose: {{ $pathogen->infectious_dose }}</li></br>
 							</ul>
 							@endforeach
 						</div>

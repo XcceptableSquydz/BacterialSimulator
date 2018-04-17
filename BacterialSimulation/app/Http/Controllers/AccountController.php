@@ -72,7 +72,7 @@ class AccountController extends Controller
         {
             return Redirect::back()->withErrors(['The entire form must be filled out', 'The pathogen was not added to the database.']);
         }
-        return Redirect::to('/admin_controls');
+        return redirect()->back()->with('message', 'Pathogen successfully added!');
     }
 
     /**
@@ -96,7 +96,7 @@ class AccountController extends Controller
         else{
             return Redirect::back()->withErrors(['The entire form must be filled out', 'The food was not added to the database.']);
         }
-        return Redirect::to('/admin_controls');
+        return redirect()->back()->with('message', 'Food successfully added!');
     }
 
     /**
@@ -113,7 +113,7 @@ class AccountController extends Controller
             $user = User::where('email', $email) -> first();
             $user->user_level = 1;
             $user->save();
-            return Redirect::to('/admin_controls');
+            return redirect()->back()->with('message', 'User successfully promoted!');
         }
         else {
             return Redirect::back()->withErrors(['No email address entered', 'The account has not been updated. Please double check the email address.']);
@@ -135,7 +135,7 @@ class AccountController extends Controller
             $user = User::where('email', $email) -> first();
             $user->user_level = 0;
             $user->save();
-            return Redirect::to('/admin_controls');
+            return redirect()->back()->with('message', 'User successfully demoted!');
         }
         else {
             return Redirect::back()->withErrors(['No email address entered', 'The account has not been updated. Please double check the email address.']);
@@ -155,7 +155,7 @@ class AccountController extends Controller
         
         if ($food_name != ''){
             Food::where('food_name', $food_name) -> delete();
-            return Redirect::to('/admin_controls');
+            return redirect()->back()->with('message', 'Pathogen successfully updated!');
         }
         else {
             return Redirect::back()->withErrors(['Something went wrong', 'Food not deleted.']);
@@ -174,7 +174,7 @@ class AccountController extends Controller
         $pathogen_name = $request->input('delete-pathogen');
         if ($pathogen_name != ''){
             Pathogen::where('pathogen_name', $pathogen_name) -> delete();
-            return Redirect::to('/admin_controls');
+            return redirect()->back()->with('message', 'Pathogen successfully deleted!');
         }
         else {
             return Redirect::back()->withErrors(['Something went wrong', 'Pathogen not deleted.']);
@@ -259,12 +259,19 @@ class AccountController extends Controller
         else{
             $new_info_link = $path->desc_link;
         }
+        if(!$request->input('new-infectious-dose') == ""){
+            $new_infectious_dose = $request->input('new-infectious-dose');
+        }
+        else{
+            $new_infectious_dose = $path->infectious_dose;
+        }
         //update the pathogen with the new values
         $path -> update([
             'pathogen_name' => $new_path_name,
             'desc_link' => $new_info_link,
             'image' => $new_image_link,
-            'formula' => $new_formula
+            'formula' => $new_formula,
+            'infectious_dose' => $new_infectious_dose
         ]);
         //return with a success message
         return redirect()->back()->with('message', 'Pathogen successfully updated!');
