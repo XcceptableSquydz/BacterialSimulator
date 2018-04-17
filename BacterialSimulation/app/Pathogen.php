@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Pathogen extends Model
 {
 	protected $fillable = [
-   		'pathogen_name', 'desc_link', 'image', 'formula', 'infectious_dose'
+   		'path_id', 'pathogen_name', 'desc_link', 'image', 'formula', 'infectious_dose'
    	];
    	public $timestamps = false;
    	protected $table = 'pathogen';
+   	protected $primaryKey = 'path_id';
 }

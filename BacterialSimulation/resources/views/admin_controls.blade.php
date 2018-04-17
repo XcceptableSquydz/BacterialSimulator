@@ -37,6 +37,12 @@
 @if ($user->user_level >= 1)
 <body>
 	<div class="container">
+		@if(session()->has('message'))
+		<div class="alert alert-success">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			{{ session()->get('message') }}
+		</div>
+		@endif
 		<!-- Creating the tabs -->
 		<div id="tabs">
 			<ul>
@@ -213,6 +219,13 @@
 										<label for="new-ph" class="col-md-4 control-label">PH Level</label>
 										<div class="col-md-6">
 											<input id="new-ph" type="number" step=".01" max="14" class="form-control" name="new-ph">
+										</div>
+									</div>
+									<!-- link to the image -->
+									<div class="form-group">
+										<label for="new-image-link" class="col-md-4 control-label">Link to Food Image</label>
+										<div class="col-md-6">
+											<input id="new-image-link" type="url" class="form-control" name="new-image-link">
 										</div>
 									</div>
 									<!-- Submit button -->
@@ -412,9 +425,9 @@
 								</div>
 							</form>
 						</div>
+						@endif
 					</div>
 				</div>
-				@endif
 				<!-- this is the tab for the view database -->
 				<div id="tabs-2">
 					<div id="accordion_view">
@@ -438,7 +451,8 @@
 								<li>Name: {{ $food->food_name }}</li>
 								<li>Is Cooked: @if ($food->cooked == 1) True @else False @endif</li>
 								<li>Available Water: {{ $food->available_water }}</li>
-								<li>PH Level: {{ $food->ph_level }}</li></br>
+								<li>PH Level: {{ $food->ph_level }}</li>
+								<li>Image Link: {{ $food->image_link }}</li></br>
 							</ul>
 							@endforeach
 						</div>

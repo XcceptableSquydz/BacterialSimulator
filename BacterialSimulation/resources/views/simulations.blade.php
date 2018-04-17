@@ -14,28 +14,31 @@
 <!-- creates the container that will hold all of the cells that populate.
         the defs/pattern are here to hold the background image.
         the path tag draws a square and fills it with the pattern. -->
-        <svg width="960" height="500" style="border: 1pt solid black">
-    <!--<defs>
-        <pattern id="imgpattern" width="1" height="1">
-            <image width="960" height="500"
-            xlink:href="https://imageresizer.static9.net.au/g1YGuRLpZO6jxEf7I-xeR4Kld9I=/1024x0/http%3A%2F%2Fprod.static9.net.au%2F_%2Fmedia%2F2017%2F09%2F28%2F09%2F43%2FCan-you-eat-raw-chicken.jpg"/>
-        </pattern>
-    </defs>-->
-    <path fill="url(#imgpattern)" stroke-width="1"
-    d="M 0,0 L 0,960 960,500 960,0  Z" />
-</svg>
-<!-- sources for the alert and hexagons/cells that will be colored -->
-<script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
-<!--<script src="{{ asset('js/simulation.js') }}"></script>-->
-<script>
+        <svg id="svgtag" width="960" height="500" style="border: 1pt solid black">
+            <defs>
+                <pattern id="imgpattern" width="1" height="1">
+                    <image id="imglink" width="960" height="500"
+                    xlink:href=""/>
+                </pattern>
+            </defs>
+            <path fill="url(#imgpattern)" stroke-width="1"
+            d="M 0,0 L 0,960 960,500 960,0  Z" />
+        </svg>
+        <!-- sources for the alert and hexagons/cells that will be colored -->
+        <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+        <!--<script src="{{ asset('js/simulation.js') }}"></script>-->
+        <script>
     //When the page loads, load these jquery functions
     $(document).ready(function() {
         var simulationClicked = 0;
         //when the run simulation button is clicked we take the input from the user and print it out
         $("#run-simulation").click(function(){
-            simulationClicked++; //needed to reset/clear the function so two simulations aren't running at the same time.
+            if(($("#select-pathogen :selected").val() != "") && ($("#select-food :selected").val() != '')){
+                simulationClicked++; //needed to reset/clear the function so two simulations aren't running at the same time.
             //changing the header based on the pathogen selected.
             path_name.innerText = $("#select-pathogen :selected").val() + " on " + $("#select-food :selected").val();
             //setting the infection dose
@@ -49,31 +52,16 @@
 
             //removing old svg elements so cells don't stay on the screen when a user wants to run the next simulation
             d3.selectAll("svg > *").remove();
+            d3.selectAll("svg > path").remove();
+            d3.selectAll("svg > g").remove();
+
+            /**/
+
             //filling svg variables with defined in the svg tag at the top
             var svg = d3.select("svg"),
             width = +svg.attr("width"),
             height = +svg.attr("height"),
             style = +svg.attr("style");
-
-            //this will be used to reset the background image to the one defined by the selected food
-            /*var defs = svg.append('svg:defs');
-
-            defs.append("svg:pattern")
-            .attr("id", "imgpattern")
-            .attr("width", 0)
-            .attr("height", 0)
-            .attr("x", 0)
-            .attr("y", 0)
-            .append("svg:image")
-            .attr("xlink:href", img)
-            .attr("width", 960)
-            .attr("height", 500);
-
-            var background = svg.append("background")
-            .attr("d", "M 0,0 L 0,960 960,500 960,0  Z")
-            .style("stroke-width", "1")
-            .style("fill", "#imgpattern");*/
-
 
             var cells = Number(cells), //number of starting cells and total cells
             infectious_dosage = Number(infectious_dosage), //infectious dose
@@ -96,7 +84,7 @@
             var rx = d3.randomNormal(width / 2, 80),
             ry = d3.randomNormal(height / 2, 80),
             points = d3.range(cells).map(function() { return [rx(), ry()]; });
-
+            background = d3.range(1).map(function() { return [rx(), ry()]; });
             //setting the color gradient based on infectious dose
             var color = d3.scaleSequential(d3.interpolateLab("white", "green"))
             .domain([0, infectious_dosage/100]);
@@ -106,6 +94,30 @@
             .radius(20)
             .extent([[0, 0], [width, height]]);
 
+            //recreating the def tag, pattern tag, and image tag to display the background
+            var defs = svg.selectAll("defs")
+            .data(hexbin(background))
+            .enter().append("defs")
+            .append("linearGradient")
+            .append("pattern")
+            .attr("id", "imgpattern")
+            .attr("width", "1")
+            .attr("height", "1")
+            .append("image")
+            .attr("id", "imglink")
+            .attr("width", "960")
+            .attr("height", "500")
+            .attr("xlink:href", function(d) { return $("#select-food :selected").attr("id")});
+
+            //recreating the path for the background so it displays on the screen
+            var background = svg.selectAll("#background")
+            .data(hexbin(background))
+            .enter().append("path")
+            .attr("id", "background")
+            .attr("d", "M 0,0 L 0,960 960,500 960,0  Z")
+            .attr("stroke-width", "1")
+            .attr("fill", "url(#imgpattern)");
+
             //giving the hexgon values and appending it to the svg path
             var hexagon = svg.selectAll("path")
             .data(hexbin(points))
@@ -113,6 +125,25 @@
             .attr("d", hexbin.hexagon(19.5))
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
             .attr("fill", function(d) { return color(d.length); });
+
+            //adding legend to the svg
+            var log = d3.scaleLog()
+            .domain([ 1, infectious_dosage/100 ])
+            .range(["white", "green"]);
+
+            var svg = d3.select("svg");
+
+            svg.append("g")
+            .attr("class", "legendLog")
+            .attr("transform", "translate(20,20)");
+
+            var logLegend = d3.legendColor()
+            .cells([1, infectious_dosage/1000, infectious_dosage/500, infectious_dosage/250, infectious_dosage/100, infectious_dosage/20, infectious_dosage/10])
+            .scale(log);
+
+            svg.select(".legendLog")
+            .call(logLegend);
+
 
             //the recursive function to add cells until the timer runs out or the infectious dose is reached
             var makeCallback = function() {
@@ -155,8 +186,8 @@
                         else{
                             simulationClicked = 0;
                             swal({
-                                title: 'Gross!',
-                                text: 'This food has been infected.',
+                                title: 'You will most likely be sick if you eat this!',
+                                text: "Number of Cells: " + cells + " Duration: " + minutes,
                                 imageUrl: 'http://www.dadshopper.com/wp-content/uploads/2016/10/21.png',
                                 imageWidth: 210,
                                 imageHeight: 200,
@@ -188,7 +219,11 @@
             };
             //the first recursive call so the simulation actually runs
             var interval = d3.timeout(makeCallback(), 100);
-        });
+        }
+        else{
+            swal("INPUT ERROR!", "Please select a Pathogen AND a Food!", "error");
+        }
+    });
 });
 </script>
 @endsection
@@ -229,11 +264,18 @@
                 <div class="form-group">
                     <input type="number" name="time" id="time" value="1" min="1">
                 </div>
-                <!-- Creating the label and slider for temperature -->
+                <!-- Creating the label and slider for temperature 
                 <label class="col-md-4">Temperature (F)</label>
                 <div class="form-group">
-                    <input type="number" name="temp" id="temp" value="0" min="0">
-                </div>
+                    <select class="form-control" id="select-temp" name="select-temp">
+                        <option value="" disabled="disabled" selected="selected">
+                            Select a Food
+                        </option>
+                        @foreach($pathogens as $pathogen)
+                        <option id="{{ $loop->index }}" value="{{ $pathogen->pathogen_name }}"> {{ $food->food_name }}</option>
+                        @endforeach
+                    </select>
+                </div> -->
                 <!-- Creating the label and slider for starting cells -->
                 <label class="col-md-4">Starting Cells</label>
                 <div class="form-group">

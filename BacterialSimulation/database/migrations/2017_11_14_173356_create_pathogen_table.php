@@ -14,6 +14,7 @@ class CreatePathogenTable extends Migration
     public function up()
     {
         Schema::create('pathogen', function (Blueprint $table) {
+            $table->increments('path_id');
             $table->string('pathogen_name');
             $table->string('formula');
             $table->string('image');
