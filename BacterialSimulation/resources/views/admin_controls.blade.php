@@ -83,9 +83,30 @@
 									</div>
 									<!-- Creating the label and input for new pathogen formula -->
 									<div class="form-group">
-										<label for="formula" class="col-md-4 control-label">Growth Rate Formula</label>
+										<label for="formula" class="col-md-4 control-label">Doubling Time (Minutes)</label>
 										<div class="col-md-6">
 											<input id="formula" type="text" class="form-control" name="formula">
+										</div>
+									</div>
+									<!-- Creating the label and input for new pathogen low temp -->
+									<div class="form-group">
+										<label for="low-temp" class="col-md-4 control-label">Temperature Where Pathogen Can't Grow</label>
+										<div class="col-md-6">
+											<input id="low-temp" type="text" class="form-control" name="low-temp">
+										</div>
+									</div>
+									<!-- Creating the label and input for new pathogen mid temp -->
+									<div class="form-group">
+										<label for="mid-temp" class="col-md-4 control-label">Temperature Where Pathogen Grows Slowly</label>
+										<div class="col-md-6">
+											<input id="mid-temp" type="text" class="form-control" name="mid-temp">
+										</div>
+									</div>
+									<!-- Creating the label and input for new pathogen high temp -->
+									<div class="form-group">
+										<label for="high-temp" class="col-md-4 control-label">Temperature Where Pathogen Grows Best</label>
+										<div class="col-md-6">
+											<input id="high-temp" type="text" class="form-control" name="high-temp">
 										</div>
 									</div>
 									<!-- Creating the label and input for new pathogen infectious dose -->
@@ -434,37 +455,125 @@
 						<!-- this is an accordion for view pathogens from the database -->
 						<h3>View Pathogens</h3>
 						<div>
-							@foreach($pathogens as $pathogen)
-							<ul>
-								<li>Name: {{ $pathogen->pathogen_name }}</li>
-								<li>Formula: {{ $pathogen->formula }}</li>
-								<li>Image Link: {{ $pathogen->image }}</li>
-								<li>Description Link: {{ $pathogen->desc_link }}</li>
-								<li>Infectious Dose: {{ $pathogen->infectious_dose }}</li></br>
-							</ul>
-							@endforeach
+							<table class="table table-hover table-striped table-bordered">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">Pathogen Name</th>
+										<th scope="col">Doubling Time (Minutes)</th>
+										<th scope="col">Infectious Dosage</th>
+										<th scope="col">Low Temperature (No growth)</th>
+										<th scope="col">Mid Temperature (Slow growth)</th>
+										<th scope="col">High Temperature (Normal growth)</th>
+										<th scope="col">Description Link</th>
+										<th scope="col">Image Link</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($pathogens as $pathogen)
+									<tr>
+										<th scope="col">{{ $pathogen->path_id }}</th>
+										<td>{{ $pathogen->pathogen_name }}</td>
+										<td>{{ $pathogen->formula }}</td>
+										<td>{{ $pathogen->infectious_dose }}</td>
+										<td>{{ $pathogen->low_temp }}</td>
+										<td>{{ $pathogen->mid_temp }}</td>
+										<td>{{ $pathogen->high_temp }}</td>										
+										<td>{{ $pathogen->desc_link }}</td>
+										<td>{{ $pathogen->image }}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
 						</div>
 						<!-- this is an accordion for view foods from the database -->
 						<h3>View Food</h3>
 						<div>
-							@foreach($foods as $food)
-							<ul>
-								<li>Name: {{ $food->food_name }}</li>
-								<li>Is Cooked: @if ($food->cooked == 1) True @else False @endif</li>
-								<li>Available Water: {{ $food->available_water }}</li>
-								<li>PH Level: {{ $food->ph_level }}</li>
-								<li>Image Link: {{ $food->image_link }}</li></br>
-							</ul>
-							@endforeach
+							<table class="table table-hover table-bordered table-striped">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">Food Name</th>
+										<th scope="col">Cooked</th>
+										<th scope="col">Water Content</th>
+										<th scope="col">PH Level</th>
+										<th scope="col">Image Link</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($foods as $food)
+									<tr>
+										<th scope="col">{{ $food->food_id }}</th>
+										<td>{{ $food->food_name }}</td>
+										<td>@if($food->cooked == 1) True @else False @endif</td>
+										<td>{{ $food->available_water }}</td>
+										<td>{{ $food->ph_level }}</td>
+										<td>{{ $food->image_link }}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
 						</div>
 						<!-- this is an accordion for view administrators from the database -->
 						<h3>View Adminstrators</h3>
 						<div>
-							@foreach($admins as $admin)
-							@if ($admin->user_level >= 1)
-							<li>Admin Email: {{ $admin->email }}</li></br>
-							@endif
-							@endforeach
+							<table class="table table-hover table-bordered table-striped">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">User Email</th>
+										<th scope="col">User Type</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($admins as $admin)
+									@if ($admin->user_level >= 1)
+									<tr>
+										<th class="data_id" scope="col">{{ $admin->id }}</th>
+										<td>{{ $admin->email }}</td>
+										<td>{{ $admin->user_type }}</td>
+									</tr>
+									@endif
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+						<h3>View Completed Simulations</h3>
+						<div>
+							<table class="table table-hover table-bordered table-striped">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">User Email</th>
+										<th scope="col">User Type</th>
+										<th scope="col">Pathogen Name</th>
+										<th scope="col">Food Name</th>
+										<th scope="col">Selected Temperature</th>
+										<th scope="col">Starting Cells</th>
+										<th scope="col">Length of Time</th>
+										<th scope="col">Doubling Time</th>
+										<th scope="col">Infectious Dosage</th>
+										<th scope="col">Growth Rate</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($simulations as $simulation)
+									<tr>
+										<th class="data_id" scope="col">{{ $simulation->id }}</th>
+										<td>{{ $simulation->user_email }}</td>
+										<td>{{ $simulation->person_type }}</td>
+										<td>{{ $simulation->pathogen_name }}</td>
+										<td>{{ $simulation->food_name }}</td>
+										<td>{{ $simulation->temp }}</td>
+										<td>{{ $simulation->cells }}</td>
+										<td>{{ $simulation->time }}</td>
+										<td>{{ $simulation->doubling_time }}</td>
+										<td>{{ $simulation->infectious_dosage }}</td>
+										<td>{{ $simulation->growth_rate }}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>

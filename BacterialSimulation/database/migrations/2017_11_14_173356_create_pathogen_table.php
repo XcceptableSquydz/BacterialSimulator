@@ -17,6 +17,9 @@ class CreatePathogenTable extends Migration
             $table->increments('path_id');
             $table->string('pathogen_name');
             $table->string('formula');
+            $table->integer('low_temp');
+            $table->integer('mid_temp');
+            $table->integer('high_temp');
             $table->string('image');
             $table->string('desc_link');
             $table->integer('infectious_dose');

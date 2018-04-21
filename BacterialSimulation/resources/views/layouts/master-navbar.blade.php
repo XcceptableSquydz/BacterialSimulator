@@ -21,6 +21,7 @@
           <?php $user = Auth::user()?>
           <a class="navbar-brand" href="/">Home</a>
           <a class="navbar-brand" href="/simulations">Simulations</a>
+          <a class="navbar-brand" href="/saved_simulations">Saved Simulations</a>
           @if ($user->user_level == 2 || $user->user_level == 1)
           <a class="navbar-brand" href="/admin_controls">Administrator Controls</a>
           @endif

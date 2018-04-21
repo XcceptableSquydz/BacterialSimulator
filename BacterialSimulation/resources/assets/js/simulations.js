@@ -1,96 +1,71 @@
-@extends('layouts.master-layout')
-@section('title')
-<title>Run Simulation</title>
-@endsection
-@section('script')
-        <!-- creates the container that will hold all of the cells that populate.
-        the defs/pattern are here to hold the background image.
-        the path tag draws a square and fills it with the pattern. -->
-        <svg id="svgtag" width="960" height="500" style="border: 1pt solid black">
-            <defs>
-                <pattern id="imgpattern" width="1" height="1">
-                    <image id="imglink" width="960" height="500"
-                    xlink:href=""/>
-                </pattern>
-            </defs>
-            <path fill="url(#imgpattern)" stroke-width="1"
-            d="M 0,0 L 0,960 960,500 960,0  Z" />
-        </svg>
-        <!-- sources for the alert and hexagons/cells that will be colored -->
-        <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
-        <script src="https://d3js.org/d3.v4.min.js"></script>
-        <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
-        <!--<script src="{{ asset('js/simulation.js') }}"></script>-->
-        <script>
-    //When the page loads, load these jquery functions
-    $(document).ready(function() {
-        var visible = <?php echo $visible; ?>;
-        //needed in order to use ajax calls to get json from SimulationsController for temperature and user
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"
+src="https://d3js.org/d3.v4.min.js"
+src="https://d3js.org/d3-hexbin.v0.2.min.js"
+src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"
+src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"
+
+$(document).ready(function() {
+    var visible = <?php echo $visible; ?>;
+    //needed in order to use ajax calls to get json from SimulationsController for temperature and user
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    /*
+    //when the pathogen is selected, send the pathogen name to the getTemperatures route
+    //that functions searches the database to get the temperatures and inserts them
+    //into the drop down menu for temperatures. this affects the growth rate.
+    */
+    $("#select-pathogen").change(function(){
+        var pathogen_name = $("#select-pathogen :selected").val();
+        $.ajax({
+            url:"{{ route('getTemperatures')}}",
+            method:'post',
+            data:{pathogen_name:pathogen_name},
+            success:function(data)
+            {
+                $('#select-temp option[value="0"]').text(data.low_temp);
+                $('#select-temp option[value="1.5"]').text(data.mid_temp);
+                $('#select-temp option[value="1"]').text(data.high_temp);
+                return doubling_time = data.formula;
             }
         });
-        /*
-        //when the pathogen is selected, send the pathogen name to the getTemperatures route
-        //that functions searches the database to get the temperatures and inserts them
-        //into the drop down menu for temperatures. this affects the growth rate.
-        */
-        $("#select-pathogen").change(function(){
-            var pathogen_name = $("#select-pathogen :selected").val();
-            $.ajax({
-                url:"{{ route('getTemperatures')}}",
-                method:'post',
-                data:{pathogen_name:pathogen_name},
-                success:function(data)
-                {
-                    $('#select-temp option[value="0"]').text(data.low_temp);
-                    $('#select-temp option[value="1.5"]').text(data.mid_temp);
-                    $('#select-temp option[value="1"]').text(data.high_temp);
-                    return doubling_time = data.formula;
-                }
-            });
-        });
-        /*
-        //creating a saved simulation database entry through ajax based on the selected input.
-        //all fields must have some value otherwise an alert tells the user to fill all fields
-        */
-        $("#save-simulation").click(function(){
-            var userID = '<?php echo $user ;?>';
-            if(userID != "-1"){
-                if(($("#select-pathogen :selected").val() != "") && ($("#select-food :selected").val() != '') && ($("#select-temp :selected").val() != '') && ($("#time").val() >= 1) && ($("#cells").val() >= 1) && ($("#title").val() != '')){
-                    var pathogen_name = $("#select-pathogen :selected").val();
-                    var food_name = $("#select-food :selected").val();
-                    var temp = $("#select-temp :selected").text();
-                    var time = Number($("#time").val());
-                    var cells = Number($("#cells").val());
-                    var title = $("#title").val();
-                    var infectious_dosage = $("#select-pathogen :selected").attr("id");
-                    var img = $("#select-food :selected").attr("id");
-                    var doubling = doubling_time;
-                    var growth_rate = $("#select-temp :selected").val();
-                    $.ajax({
-                        url:"{{ route('saveSimulation')}}",
-                        method:'post',
-                        data:{pathogen_name:pathogen_name, food_name:food_name, temp:temp, time:time, 
-                            cells:cells, title:title, infectious_dosage:infectious_dosage, doubling:doubling_time, img:img, growth_rate:growth_rate, userID:userID},
-                            success:function(data)
-                            {
-                                swal({text: "Simualtion saved!", type: "success"});
-                            },
-                            error: function (error) {
-                                swal({text: "Something went wrong! Please try again later.", type: "error"});
-                            }
-                        });
-                }
-                else{
-                    swal("INPUT ERROR!", "Please select a Pathogen, a Food, and a Temperature! Length of Time and Starting Cells must be 1 or greater. A title is also required.", "error");
-                }
+    });
+    /*
+    //creating a saved simulation database entry through ajax based on the selected input.
+    //all fields must have some value otherwise an alert tells the user to fill all fields
+    */
+    $("#save-simulation").click(function(){
+        var userID = '<?php echo $user ;?>';
+        if(userID != "-1"){
+            if(($("#select-pathogen :selected").val() != "") && ($("#select-food :selected").val() != '') && ($("#select-temp :selected").val() != '') && ($("#time").val() >= 1) && ($("#cells").val() >= 1) && ($("#title").val() != '')){
+                var pathogen_name = $("#select-pathogen :selected").val();
+                var food_name = $("#select-food :selected").val();
+                var temp = $("#select-temp :selected").text();
+                var time = Number($("#time").val());
+                var cells = Number($("#cells").val());
+                var title = $("#title").val();
+                $.ajax({
+                    url:"{{ route('saveSimulation')}}",
+                    method:'post',
+                    data:{pathogen_name:pathogen_name, food_name:food_name, temp:temp, time:time, 
+                        cells:cells, title:title, userID:userID},
+                        success:function(data)
+                        {
+                            swal({text: "Simualtion saved!", type: "success"});
+                        },
+                        error: function (error) {
+                            swal({text: "Something went wrong! Please try again later.", type: "error"});
+                        }
+                    });
             }
-        });
-        var simulationClicked = 0;
+            else{
+                swal("INPUT ERROR!", "Please select a Pathogen, a Food, and a Temperature! Length of Time and Starting Cells must be 1 or greater. A title is also required.", "error");
+            }
+        }
+    });
+    var simulationClicked = 0;
         /*
         //The actually script to run the simulation. Based on all user input the d3.js will populate the screen
         //will hexagons, their colors ranging from white to black with green in-between.
@@ -111,25 +86,6 @@
                         data:{userID:userID}
                     });
                 }
-
-                /*
-                //this method collects the data from the currently run simulation
-                */
-                var pathogen_name = $("#select-pathogen :selected").val();
-                var food_name = $("#select-food :selected").val();
-                var temp = $("#select-temp :selected").text();
-                var time = Number($("#time").val());
-                var cells = Number($("#cells").val());
-                var infectious_dosage = $("#select-pathogen :selected").attr("id");
-                var doubling = doubling_time;
-                var growth_rate = $("#select-temp :selected").val();
-                $.ajax({
-                    url:"{{ route('collectData')}}",
-                    method:'post',
-                    data:{pathogen_name:pathogen_name, food_name:food_name, temp:temp, time:time, 
-                        cells:cells, infectious_dosage:infectious_dosage, doubling:doubling_time, growth_rate:growth_rate, userID:userID}
-                    });
-
                 simulationClicked++; //needed to reset/clear the function so two simulations aren't running at the same time.
                 //setting the infection dose
                 var doubling_counter = 0;
@@ -155,7 +111,7 @@
                 var cells = Number(cells), //number of starting cells and total cells
                 infectious_dosage = Number(infectious_dosage), //infectious dose
                 lot = 1; //length of time
-                //doubling time to keep the animations interesting need to be in the double digits
+                //doublind time to keep the animations interesting need to be in the double digits
                 if(doubling_time > 100){
                     var doublingTime = Math.round(Number(doubling_time)/100) * Number($("#select-temp :selected").val()); //the growth rate in minutes
                     var msg = "(~10 minutes per second)";
@@ -284,7 +240,7 @@
                                 //once infectious show the sweet alert
                                 else{
                                     simulationClicked = 0;
-                                    if(doubling_counter > 0 && speed > 1)
+                                    if(doubling_counter > 0)
                                         var duration = (minutes%10)+(doubling_counter*Number(doubling_time));
                                     else
                                         var duration = (minutes*speed);
@@ -310,7 +266,7 @@
                         //if the time is reached before infectious don't show the sweet alert and stop the function
                         else{
                             simulationClicked = 0;
-                            if(doubling_counter > 0 && speed > 1)
+                            if(doubling_counter > 0)
                                 var duration = (minutes%10)+(doubling_counter*Number(doubling_time));
                             else
                                 var duration = (minutes*speed);
@@ -348,93 +304,3 @@
             }
         });
 });
-</script>
-@endsection
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <form class="form-inline">
-                <!-- Creating the label and input for pathogen drop down-->
-                <label class="col-md-offset-1">Pathogen: </label>
-                <select class="form-control" id="select-pathogen" name="select-pathogen">
-                    <option value="" disabled="disabled" selected="selected">
-                        -- Select a Pathogen --
-                    </option>
-                    @foreach($pathogens as $pathogen)
-                    <option id="{{ $pathogen->infectious_dose }}" value="{{ $pathogen->pathogen_name }}"> {{ $pathogen->pathogen_name }}</option>
-                    @endforeach
-                </select>
-                <!-- Creating the label and input for food drop down-->
-                <label class="col-md-offset-1">Food: </label>
-                <select class="form-control" id="select-food" name="select-food">
-                    <option value="" disabled="disabled" selected="selected">
-                        -- Select a Food --
-                    </option>
-                    @foreach($foods as $food)
-                    <option id="{{ $food->image_link }}" value="{{ $food->food_name }}"> {{ $food->food_name }}</option>
-                    @endforeach
-                </select>
-                <!-- Creating the label and drop down for temperature -->
-                <label class="col-md-offset-1">Temperature (F)</label>
-                <select class="form-control" id="select-temp" name="select-temp">
-                    <option value="" disabled="disabled" selected="selected">
-                        -- Select a Temp --
-                    </option>
-                    <option id="low_temp" value="0"></option>
-                    <option id="mid_temp" value="1.5"></option>
-                    <option id="high_temp" value="1"></option>
-                </select>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <form class="form-inline" method="POST">
-                <!-- Creating the label and input for length of time -->
-                <label class="col-md-offset-1">Length of Time (Minutes):</label>
-                <input type="number" name="time" id="time" value="1" min="1">
-                <!-- checkbox for letting simulation run until time runs out -->
-                <label class="col-md-offset-1">Full Duration:</label>
-                <input type="checkbox" name="time-chk-box" id="time-chk-box">
-                <!-- Creating the label and input for starting cells -->
-                <label class="col-md-offset-1">Starting Cells:</label>
-                <input type="number" name="cells" id="cells" value="1" min="1">
-            </form>
-        </div>
-    </div>
-    <!-- Creating the run simulations button -->
-    <div class="col-md-offset-1">
-        <br>
-        <button id="run-simulation" name="run-simulation" class="btn btn-primary">
-            Run Simulation
-        </button>
-        <br>
-    </div>
-</p>
-</br>
-<center>
-    <h3 id="path_name"></h3>
-    <label id="num_cells">Number of Cells: 0</label>
-    <label id="lot" class="col-md-offset-1">Length of Time (Minutes): 0</label>
-</center>
-@endsection
-@section('save_simulation')
-@if(Auth::guest())
-@else
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <form class="form-inline">
-                <!-- Creating the label and input for length of time -->
-                <label class="col-md-offset-7">Title this Simulation:</label>
-                <input type="text" name="title" id="title">
-                <button id="save-simulation" name="save-simulation" class="btn btn-primary">
-                    Save Simulation
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-@endif
-@endsection

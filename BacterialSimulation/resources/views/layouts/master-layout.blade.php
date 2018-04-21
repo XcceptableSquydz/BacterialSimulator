@@ -27,9 +27,12 @@
         <div>
             @yield('content')
         </div>
-        <center>
-            @yield('script')
-        </center>
+        <div class="container">
+            <center>
+                @yield('script')
+            </center>
+        </div>
+        @yield('save_simulation')
     </body>
 
     </html>

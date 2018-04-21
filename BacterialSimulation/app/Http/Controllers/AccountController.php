@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Pathogen;
 use App\Food;
 use App\User;
+use App\DataCollection;
 use Auth;
 use Hash;
 use Session;
@@ -45,9 +46,10 @@ class AccountController extends Controller
         $pathogens = Pathogen::all();
         $foods = Food::all();
         $admins = User::all();
+        $simulations = DataCollection::all();
         return view('admin_controls', ['pathogens' => $pathogens,
             'foods' => $foods,
-            'admins' => $admins]);
+            'admins' => $admins, 'simulations' => $simulations]);
     }
 
     /**
@@ -65,6 +67,9 @@ class AccountController extends Controller
                 'desc_link' => $request->input('info-link'),
                 'image' => $request->input('image-link'),
                 'formula' => $request->input('formula'),
+                'low_temp' => $request->input('low-temp'),
+                'mid_temp' => $request->input('mid-temp'),
+                'high_temp' => $request->input('high-temp'),
                 'infectious_dose' => $request->input('infectious')
             ]);
         }

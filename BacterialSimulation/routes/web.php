@@ -13,7 +13,7 @@
 
 //route to get the homepage. instead of the default laravel one this points to the welcome view
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 Auth::routes();
@@ -40,3 +40,9 @@ Route::post('/admin_controls/editfood', 'AccountController@editFood')->name('adm
 Route::post('/admin_controls/editpathogen', 'AccountController@editPathogen')->name('admin_controls/editpathogen');
 //simulations route to get to the page
 Route::get('/simulations', 'SimulationsController@index');
+Route::post('getTemperatures', 'SimulationsController@getTemperatures')->name('getTemperatures');
+Route::post('updateTotalSimsRun', 'SimulationsController@updateTotalSimsRun')->name('updateTotalSimsRun');
+Route::post('saveSimulation', 'SimulationsController@saveSimulation')->name('saveSimulation');
+Route::get('/saved_simulations', 'SimulationsController@getSavedSimulations')->name('saved_simulation');
+Route::get('delete_saved_sim', 'SimulationsController@deleteSavedSimulations')->name('delete_saved_sim');
+Route::post('collectData', 'SimulationsController@collectData')->name('collectData');
