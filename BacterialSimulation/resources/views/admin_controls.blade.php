@@ -522,6 +522,11 @@
 												<option value="{{ $pathogen->pathogen_name }}"> {{ $pathogen->pathogen_name }}</option>
 												@endforeach
 											</select>
+											@if ($errors->has('delete-pathogen'))
+                                				<span class="help-block">
+                                    				<strong>{{ $errors->first('delete-pathogen') }}</strong>
+                                				</span>
+                                			@endif
 										</div>
 									</div>
 									<!-- Submit button -->
@@ -542,7 +547,7 @@
 								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/delete_food') }}">
 									{{ csrf_field() }}
 									<!-- Creating the label and input for food drop down -->
-									<div class="form-group">
+									<div class="form-group{{ $errors->has('') ? ' has-error' : '' }}">
 										<label for="delete-food" class="col-md-4 control-label">Select Food</label>
 										<div class="col-md-6">
 											<select class="form-control" id="delete-food" name="delete-food">
@@ -553,6 +558,11 @@
 												<option value="{{ $food->food_name }}"> {{ $food->food_name }}</option>
 												@endforeach
 											</select>
+											@if ($errors->has('delete-food'))
+                                				<span class="help-block">
+                                    				<strong>{{ $errors->first('delete-food') }}</strong>
+                                				</span>
+                                			@endif
 										</div>
 									</div>
 									<!-- Submit button -->
