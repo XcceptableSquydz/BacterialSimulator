@@ -1,27 +1,39 @@
-<nav role="navigation" class="navbar navbar-expand-md navbar-light bg-light fixed-top">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span> 
-    </button>
-  </div>
+<nav role="navigation" class="topnav">
+
   <!-- Collection of nav links and other content for toggling -->
-  <div id="navbar" class="navbar">
-    <ul class="nav navbar-nav">
+  <div id="header" class="topnav">
+      <script>
+    function myFunction()
+    {
+      var x = document.getElementById("header");
+      if (x.className === "topnav")
+      {
+        x.className += " responsive";
+      }
+
+      else
+      {
+        x.className = "topnav";
+      }
+}
+</script>
+    <ul class="topnav">
       <!-- if the user isn't logged in show the login button, otherwise show the logout button-->
       <li>
         <li>
           @if (Auth::guest())
+          
           <a class="navbar-brand" href="/">Home</a>
           <a class="navbar-brand" href="/simulations">Simulations</a>
           <a class="navbar-brand" href="/register">Create Account</a>
           <a class="navbar-brand" href="/login">Login</a>
+          <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
           @else
           <?php $user = Auth::user()?>
+          
           <a class="navbar-brand" href="/">Home</a>
           <a class="navbar-brand" href="/simulations">Simulations</a>
-          <a class="navbar-brand" href="/saved_simulations">Saved Simulations</a>
+          <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
           @if ($user->user_level == 2 || $user->user_level == 1)
           <a class="navbar-brand" href="/admin_controls">Administrator Controls</a>
           @endif
