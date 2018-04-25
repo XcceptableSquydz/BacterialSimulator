@@ -36,7 +36,7 @@
 <?php $user = Auth::user()?>
 @if ($user->user_level >= 1)
 <body>
-	<div class="container">
+	<div class="container" style="margin-top: 50px;">
 		@if(session()->has('message'))
 		<div class="alert alert-success">
 			<button type="button" class="close" data-dismiss="alert">×</button>
@@ -606,7 +606,7 @@
 						@endif
 					</div>
 				</div>
-				<!-- this is the tab for the view database -->
+				<!-- this is the tab for the view database each accordion has a table filled with their resective information -->
 				<div id="tabs-2">
 					<div id="accordion_view">
 						<!-- this is an accordion for view pathogens from the database -->

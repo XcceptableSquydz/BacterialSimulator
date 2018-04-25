@@ -6,11 +6,11 @@
 <!-- container class holds everything in a responsive box
     row class sets each new form into a new row (12 cols per line)
     col-md-# defines the column size of the div, offset sets the column that many cols to the right -->
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Account Information: </div>
+    <div class="container" style="margin-top: 50px;">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Account Information: </div>
                     <div class="panel-body">
                         <form class="form-horizontal">
                             <!-- a form group holds a set of labels and inputs -->
@@ -48,13 +48,6 @@
                                     </a>
                                 </div>
                             </div>
-                            <!--<div class="form-group">
-                                <div class="col-md-8 col-centered">
-                                    <button type="submit" class="btn btn-danger" id='delete-button'>
-                                        Delete Account
-                                    </button>
-                                </div>
-                            </div>-->
                         </form>
                     </div>
                 </div>

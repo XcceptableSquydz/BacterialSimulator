@@ -34,6 +34,72 @@
         <script>
     //When the page loads, load these jquery functions
     $(document).ready(function() {
+        var visible = <?php echo $visible; ?>;
+        //needed in order to use ajax calls to get json from SimulationsController for temperature and user
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        /*
+        //when the pathogen is selected, send the pathogen name to the getTemperatures route
+        //that functions searches the database to get the temperatures and inserts them
+        //into the drop down menu for temperatures. this affects the growth rate.
+        */
+        $("#select-pathogen").change(function(){
+            var pathogen_name = $("#select-pathogen :selected").val();
+            $.ajax({
+                url:"{{ route('getTemperatures')}}",
+                method:'post',
+                data:{pathogen_name:pathogen_name},
+                success:function(data)
+                {
+                    $('#select-temp option[value="0"]').text(data.low_temp);
+                    $('#select-temp option[value="1.5"]').text(data.mid_temp);
+                    $('#select-temp option[value="1"]').text(data.high_temp);
+                    $("#link").attr("href", data.desc_link)
+                    $("#link").text(data.desc_link);
+                    return doubling_time = data.formula;
+                }
+            });
+        });
+        /*
+        //creating a saved simulation database entry through ajax based on the selected input.
+        //all fields must have some value otherwise an alert tells the user to fill all fields
+        */
+        $("#save-simulation").click(function(){
+            var userID = '<?php echo $user ;?>';
+            if(userID != "-1"){
+                if(($("#select-pathogen :selected").val() != "") && ($("#select-food :selected").val() != '') && ($("#select-temp :selected").val() != '') && ($("#time").val() >= 1) && ($("#cells").val() >= 1) && ($("#title").val() != '')){
+                    var pathogen_name = $("#select-pathogen :selected").val();
+                    var food_name = $("#select-food :selected").val();
+                    var temp = $("#select-temp :selected").text();
+                    var time = Number($("#time").val());
+                    var cells = Number($("#cells").val());
+                    var title = $("#title").val();
+                    var infectious_dosage = $("#select-pathogen :selected").attr("id");
+                    var img = $("#select-food :selected").attr("id");
+                    var doubling = doubling_time;
+                    var growth_rate = $("#select-temp :selected").val();
+                    $.ajax({
+                        url:"{{ route('saveSimulation')}}",
+                        method:'post',
+                        data:{pathogen_name:pathogen_name, food_name:food_name, temp:temp, time:time, 
+                            cells:cells, title:title, infectious_dosage:infectious_dosage, doubling:doubling_time, img:img, growth_rate:growth_rate, userID:userID},
+                            success:function(data)
+                            {
+                                swal({text: "Simualtion saved!", type: "success"});
+                            },
+                            error: function (error) {
+                                swal({text: "Something went wrong! Please try again later.", type: "error"});
+                            }
+                        });
+                }
+                else{
+                    swal("INPUT ERROR!", "Please select a Pathogen, a Food, and a Temperature! Length of Time and Starting Cells must be 1 or greater. A title is also required.", "error");
+                }
+            }
+        });
         var simulationClicked = 0;
         //when the run simulation button is clicked we take the input from the user and print it out
         $("#run-simulation").click(function(){
@@ -228,83 +294,118 @@
 </script>
 @endsection
 @section('content')
-
-<div class="container" style = "z-index: -1;">
+<div class="container" style="margin-top: 50px;">
     <div class="row">
         <div class="col-md-12">
-            <form class="form-inline" method="POST" action="{{ route('admin_controls/delete_pathogen') }}">
-                {{ csrf_field() }}
-                <!-- Creating the label and input for pathogen drop down-->
-                <label class="col-md-4">Select Pathogen</label>
-                <div class="form-group">
-                    <select class="form-control" id="select-pathogen" name="select-pathogen">
-                        <option value="" disabled="disabled" selected="selected">
-                            Select a Pathogen
-                        </option>
-                        @foreach($pathogens as $pathogen)
-                        <option id="{{ $pathogen->infectious_dose }}" value="{{ $pathogen->pathogen_name }}"> {{ $pathogen->pathogen_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <!-- Creating the label and input for food drop down-->
-                <label class="col-md-4">Select Food</label>
-                <div class="form-group">
-                    <div>
-                        <select class="form-control" id="select-food" name="select-food">
+            <form class="form-inline">
+                <div class="col-md-4">
+                    <!-- Creating the label and input for pathogen drop down-->
+                    <div class="col-md-2">
+                        <label for="select-pathogen">Pathogen: </label>
+                    </div>
+                    <div class="col-md-8">
+                        <select class="form-control" id="select-pathogen" name="select-pathogen">
                             <option value="" disabled="disabled" selected="selected">
-                                Select a Food
+                                -- Select a Pathogen --
                             </option>
-                            @foreach($foods as $food)
-                            <option id="{{ $food->image_link }}" value="{{ $food->food_name }}"> {{ $food->food_name }}</option>
+                            @foreach($pathogens as $pathogen)
+                            <option id="{{ $pathogen->infectious_dose }}" value="{{ $pathogen->pathogen_name }}"> {{ $pathogen->pathogen_name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-                <!-- Creating the label and slider for length of time -->
-                <label class="col-md-4">Length of Time (Minutes)</label>
-                <div class="form-group">
-                    <input type="number" name="time" id="time" value="1" min="1">
-                </div>
-                <!-- Creating the label and slider for temperature 
-                <label class="col-md-4">Temperature (F)</label>
-                <div class="form-group">
-                    <select class="form-control" id="select-temp" name="select-temp">
+                <div class="col-md-4">
+                    <!-- Creating the label and input for food drop down-->
+                    <div class="col-md-2">
+                        <label>Food: </label>
+                    </div>
+                    <select class="form-control" id="select-food" name="select-food">
                         <option value="" disabled="disabled" selected="selected">
-                            Select a Food
+                            -- Select a Food --
                         </option>
-                        @foreach($pathogens as $pathogen)
-                        <option id="{{ $loop->index }}" value="{{ $pathogen->pathogen_name }}"> {{ $food->food_name }}</option>
+                        @foreach($foods as $food)
+                        <option id="{{ $food->image_link }}" value="{{ $food->food_name }}"> {{ $food->food_name }}</option>
                         @endforeach
                     </select>
-                </div> -->
-                <!-- Creating the label and slider for starting cells -->
-                <label class="col-md-4">Starting Cells</label>
-                <div class="form-group">
-                    <input type="number" name="cells" id="cells" value="1" min="1">
                 </div>
-            </form>
-            <!-- Creating the run simulations button -->
-            <div class="col-md-4 col-md-offset-1">
-                <br>
-                <button id="run-simulation" name="run-simulation" class="btn btn-primary">
-                    Run Simulation
-                </button>
-                <br>
+                <div class="col-md-4">
+                    <!-- Creating the label and drop down for temperature -->
+                    <div class="col-md-6">
+                        <label>Temperature (F): </label>
+                    </div>
+                    <div class="col-md-1">
+                        <select class="form-control" id="select-temp" name="select-temp">
+                            <option value="" disabled="disabled" selected="selected">
+                                -- Select a Temp --
+                            </option>
+                            <option id="low_temp" value="0"></option>
+                            <option id="mid_temp" value="1.5"></option>
+                            <option id="high_temp" value="1"></option>
+                        </select>
+                    </div>
+                </div>
             </div>
-
-            <!-- only for iteration 1 testing -->
-            <p id="par-input">
-            </p>
-            <br>
-            <br>
-            <br>
-        </div>
+            <!-- Creating the label and input for length of time -->
+            <div class="col-md-4">
+                <div class="col-md-7">
+                    <label>Length of Time (Minutes):</label>
+                </div>
+                <div class="col-md-1">
+                    <input type="number" name="time" id="time" value="1" min="1" max="1000" style="width: 50px;">
+                </div>
+            </div>
+            <!-- checkbox for letting simulation run until time runs out -->
+            <div class="col-md-4">
+                <div class="col-md-5" style="margin-right: 15px">
+                    <label>Full Duration:</label>
+                </div>
+                <div class="col-md-2" style="margin-right: 15px">
+                    <input type="checkbox" name="time-chk-box" id="time-chk-box">
+                </div>
+            </div>
+            <!-- Creating the label and input for starting cells -->
+            <div class="col-md-4">
+                <div class="col-md-6 col-sm-offset-1" style="margin-right: 15px">
+                    <label>Starting Cells:</label>
+                </div>
+                <div class="col-md-1" style="margin-right: 15px">
+                    <input type="number" name="cells" id="cells" value="1" min="1" style="width: 50px;">
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Creating the run simulations button -->
+    <div>
+        <br>
+        <button id="run-simulation" name="run-simulation" class="btn btn-primary">
+            Run Simulation
+        </button>
+        <br>
     </div>
 </div>
-
+</br>
 <center>
     <h3 id="path_name"></h3>
     <label id="num_cells">Number of Cells: 0</label>
     <label id="lot" class="col-md-offset-1">Length of Time (Minutes): 0</label>
+    <label class="col-md-offset-1" for="link">More Info: </label><a id="link" href=""></a>
 </center>
+@endsection
+@section('save_simulation')
+@if(!Auth::guest())
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-inline">
+                <!-- Creating the label and input for length of time -->
+                <label class="col-md-offset-7">Title this Simulation:</label>
+                <input type="text" name="title" id="title">
+                <button id="save-simulation" name="save-simulation" class="btn btn-primary">
+                    Save Simulation
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 @endsection

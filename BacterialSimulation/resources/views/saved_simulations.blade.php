@@ -1,7 +1,8 @@
 @extends('layouts.master-layout')
 @section('content')
-<div class="container">
+<div class="container" style="margin-top: 50px;">
 	<body>
+		<!-- creating the table that holds all of the saved simulations for a specific user -->
 		<table class="table table-hover table-bordered table-striped">
 			<thead>
 				<tr>
@@ -19,6 +20,7 @@
 					<th scope="col">Delete</th>
 				</tr>
 			</thead>
+			<!-- filling the table with the information from the database -->
 			<tbody>
 				@foreach($saved_simulations as $saved_simulation)
 				<tr>
@@ -52,6 +54,7 @@
 </div>
 @endsection
 @section('script')
+<!-- all the functions from the simulations page -->
 <svg id="svgtag" width="960" height="500" style="border: 1pt solid black">
 	<defs>
 		<pattern id="imgpattern" width="1" height="1">
@@ -62,11 +65,6 @@
 	<path fill="url(#imgpattern)" stroke-width="1"
 	d="M 0,0 L 0,960 960,500 960,0  Z" />
 </svg>
-<script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
 <script>
 	$(document).ready(function() {
 		$.ajaxSetup({

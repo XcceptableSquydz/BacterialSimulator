@@ -48,6 +48,7 @@ class SimulationsController extends Controller
 
     public function updateTotalSimsRun(Request $request)
     {
+        //get the user based on the id sent in and increment their simulations run
         $user_id = $request->userID;
         $user = User::where('id', $user_id) -> first();
         $user->total_sims_run = $user->total_sims_run + 1;
@@ -83,6 +84,7 @@ class SimulationsController extends Controller
     }
 
     public function deleteSavedSimulations(Request $request){
+        //get the simulation based on the id sent to the function and delete it from the database
         $sim_id = $request->input('saved_sim_id');
         $saved_simulations = SavedSimulations::where('saved_sim_id', $sim_id)->first();
         $saved_simulations->delete();
@@ -90,6 +92,8 @@ class SimulationsController extends Controller
 
     public function collectData(Request $request)
     {
+        //every time a simulation is run put that information in the database
+        //if the user is a guest put in guest user information
         if($request->input('userID') === "-1"){
             $userID = 0;
             $user_email = "GUEST";
