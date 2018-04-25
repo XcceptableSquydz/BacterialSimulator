@@ -688,7 +688,10 @@
 									<tr>
 										<th class="data_id" scope="col">{{ $admin->id }}</th>
 										<td>{{ $admin->email }}</td>
-										<td>{{ $admin->user_type }}</td>
+										@if ($user->user_type == 1)<td>Educator</td>
+                                    	@elseif ($user->user_type == 2) <td>Student</td>
+                                    	@else <td>General Public</td>
+                                    	@endif
 									</tr>
 									@endif
 									@endforeach

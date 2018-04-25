@@ -18,7 +18,7 @@ Route::get('/', function () {
 	return view('welcome');
 });
 
-Auth::secure_url();
+Auth::routes();
 //route to log the user out
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 //account route to get the account view
