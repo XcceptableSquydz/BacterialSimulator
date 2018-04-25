@@ -47,7 +47,7 @@ class EditAccountController extends Controller
                 $user->user_type = Request::input('user_type');
             }
             $user->save();
-            return Redirect::to('/account');
+            return redirect()->action('AccountController@index');
         }
         else{
             return Redirect::back()->withErrors(['Incorrect Password!', 'Your account has not been updated. Please double check your password.']);

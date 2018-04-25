@@ -1,5 +1,7 @@
 <?php
-
+if (env('APP_ENV') === 'production') {
+	URL::forceSchema('https');
+}
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +18,7 @@ Route::get('/', function () {
 	return view('welcome');
 });
 
-Auth::routes();
+Auth::secure_url();
 //route to log the user out
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 //account route to get the account view

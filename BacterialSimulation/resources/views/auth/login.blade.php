@@ -9,7 +9,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Login</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                    <form class="form-horizontal" method="POST" action="{{ secure_url('login') }}">
                         {{ csrf_field() }}
                         <!-- email -->
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">

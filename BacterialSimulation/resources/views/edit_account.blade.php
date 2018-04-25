@@ -9,7 +9,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Edit Account</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('edit_account') }}">
+                    <form class="form-horizontal" method="POST" action="{{ secure_url('edit_account') }}">
                         {{ csrf_field() }}
                         <!-- email -->
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">

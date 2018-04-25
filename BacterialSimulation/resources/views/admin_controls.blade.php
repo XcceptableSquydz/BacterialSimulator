@@ -58,7 +58,7 @@
 						<div>
 							<!-- bootstrap formatting to keep the form responsive -->
 							<div class="container">
-								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/pathogen') }}">
+								<form class="form-horizontal" method="POST" action="{{ secure_url('admin_controls/pathogen') }}">
 									<!-- csrf token -->
 									{{ csrf_field() }}
 									<!-- Creating the label and input for new pathogen name -->
@@ -172,7 +172,7 @@
 						<div>
 							<!-- bootstrap formatting to keep the form responsive -->
 							<div class="container">
-								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/food') }}">
+								<form class="form-horizontal" method="POST" action="{{ secure_url('admin_controls/food') }}">
 									<!-- csrf token -->
 									{{ csrf_field() }}
 									<!-- Creating the label and input for new food name -->
@@ -256,7 +256,7 @@
 						<div>
 							<!-- bootstrap formatting to keep the form responsive -->
 							<div class="container">
-								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/editfood') }}">
+								<form class="form-horizontal" method="POST" action="{{ secure_url('admin_controls/editfood') }}">
 									<!-- csrf token -->
 									{{ csrf_field() }}
 									
@@ -361,7 +361,7 @@
 						<div>
 							<!-- bootstrap formatting to keep the form responsive -->
 							<div class="container">
-								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/editpathogen') }}">
+								<form class="form-horizontal" method="POST" action="{{ secure_url('admin_controls/editpathogen') }}">
 									<!-- csrf token -->
 									{{ csrf_field() }}
 									<div class="form-group{{ $errors->has('pathogen-name') ? ' has-error' : '' }}">
@@ -478,8 +478,8 @@
 						<h3>Promote User</h3>
 						<div>
 							<div class="container">
-								<!-- Input user's email -->
-								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/promote') }}">
+								<!-- Input users email -->
+								<form class="form-horizontal" method="POST" action="{{ secure_url('admin_controls/promote') }}">
 									{{ csrf_field() }}
 									<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
 										<label for="email" class="col-md-4 control-label">E-Mail Address</label>
@@ -508,9 +508,9 @@
 						<div>
 							<div class="container">
 								<!-- Select pathogen to delete -->
-								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/delete_pathogen') }}">
+								<form class="form-horizontal" method="POST" action="{{ secure_url('admin_controls/delete_pathogen') }}">
 									{{ csrf_field() }}
-									<!-- Creating the label and input for new pathogen drop down-->
+									<!-- Creating the label and input for new pathogen drop down -->
 									<div class="form-group">
 										<label for="delete-pathogen" class="col-md-4 control-label">Select Pathogen</label>
 										<div class="col-md-6">
@@ -544,7 +544,7 @@
 						<div>
 							<div class="container">
 								<!-- Select food to delete -->
-								<form class="form-horizontal" method="POST" action="{{ route('admin_controls/delete_food') }}">
+								<form class="form-horizontal" method="POST" action="{{ secure_url('admin_controls/delete_food') }}">
 									{{ csrf_field() }}
 									<!-- Creating the label and input for food drop down -->
 									<div class="form-group{{ $errors->has('') ? ' has-error' : '' }}">
@@ -579,8 +579,8 @@
 						@if ($user->user_level == 2)
 						<h3>Demote User</h3>
 						<div>
-							<!-- Input user's email -->
-							<form class="form-horizontal" method="POST" action="{{ route('admin_controls/demote') }}">
+							<!-- Input users email -->
+							<form class="form-horizontal" method="POST" action="{{ secure_url('admin_controls/demote') }}">
 								{{ csrf_field() }}
 								<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
 									<label for="email" class="col-md-4 control-label">E-Mail Address</label>
